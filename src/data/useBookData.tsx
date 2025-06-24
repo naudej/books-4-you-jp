@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import {bookApiSchema} from "./bookSchema.ts";
+import { bookApiSchema } from "./bookSchema.ts";
 import {Book, IndustryIdentifier, ISBN_TYPES} from "./types.ts";
-import { parse, format as dateFormat, isValid } from 'date-fns'
+import { parse, format as dateFormat, isValid } from 'date-fns';
 
 const getIsbnNumber = (industryIdentifiers: IndustryIdentifier[]) => {
     const isbn13 = industryIdentifiers.find((isbn) => isbn.type === ISBN_TYPES.ISBN_13);
@@ -45,7 +45,7 @@ export function useBookData(searchTerm: string = 'henry') {
                     `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}`,
                     { signal: controller.signal },
                 )
-                const data = await response.json()
+                const data = await response.json();
                 const {items } = await bookApiSchema.validate(data);
                 const books: Book [] = items.map(({id, volumeInfo}) => {
                     const { title, authors, publishedDate, categories, industryIdentifiers, imageLinks } = volumeInfo;

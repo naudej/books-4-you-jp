@@ -5,81 +5,36 @@ import TableCell from "@mui/material/TableCell";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Box from "@mui/material/Box";
 import {visuallyHidden} from "@mui/utils";
-
-interface Data {
-    id: number;
-    calories: number;
-    carbs: number;
-    fat: number;
-    name: string;
-    protein: number;
-}
-
-type Order = 'asc' | 'desc';
-
-interface HeadCell {
-    id: keyof Data;
-    label: string;
-    numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
-    {
-        id: 'name',
-        numeric: false,
-        label: 'Dessert (100g serving)',
-    },
-    {
-        id: 'calories',
-        numeric: true,
-        label: 'Calories',
-    },
-    {
-        id: 'fat',
-        numeric: true,
-        label: 'Fat (g)',
-    },
-    {
-        id: 'carbs',
-        numeric: true,
-        label: 'Carbs (g)',
-    },
-    {
-        id: 'protein',
-        numeric: true,
-        label: 'Protein (g)',
-    },
-];
-
+import {Book, HeadCell, Order} from "../data/types.ts";
 
 interface TableHeaderProps {
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Book) => void;
     order: Order;
     orderBy: string;
+    headers: HeadCell[];
 }
 
-const TableHeader: React.FC<TableHeaderProps> = ({order, orderBy, onRequestSort}) => {
+const TableHeader: React.FC<TableHeaderProps> = ({order, orderBy, onRequestSort, headers}) => {
     const createSortHandler =
-        (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+        (property: keyof Book) => (event: React.MouseEvent<unknown>) => {
             onRequestSort(event, property);
         };
 
     return (
         <TableHead>
             <TableRow>
-                {headCells.map((headCell) => (
+                {headers.map((header) => (
                     <TableCell
-                        key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
-                        sortDirection={orderBy === headCell.id ? order : false}
+                        key={header.id}
+                        sortDirection={orderBy === header.id ? order : false}
                     >
                         <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
+                            active={orderBy === header.id}
+                            direction={orderBy === header.id ? order : 'asc'}
+                            onClick={createSortHandler(header.id)}
                         >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
+                            {header.label}
+                            {orderBy === header.id ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                 </Box>

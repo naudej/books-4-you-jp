@@ -11,9 +11,9 @@ export default function Dashboard() {
         if (matchPath('/', location.pathname)) {
             return `Catalogue`;
         }
-        if (matchPath('/book/:bookId/:bookTitle', location.pathname)) {
-            return `${bookTitle}`;
-        }
+        // if (matchPath('/book/:bookId', location.pathname)) {
+        //     return `${bookTitle}`;
+        // }
         return undefined;
     }, [location.pathname, bookTitle]);
 

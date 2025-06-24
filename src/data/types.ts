@@ -2,6 +2,19 @@ import {InferType} from "yup";
 import {industryIdentifierSchema} from "./bookSchema.ts";
 
 
+export type Order = 'asc' | 'desc';
+
+export interface HeadCell {
+    id: keyof Book;
+    label: string;
+}
+
+export type SearchOption = {
+    id: string
+    title: string
+}
+
+
 export enum ISBN_TYPES {
     ISBN_10 = "ISBN_10",
     ISBN_13 = "ISBN_13",
