@@ -8,7 +8,7 @@ import { visuallyHidden } from '@mui/utils';
 import { Book, HeadCell, Order } from '../data/types.ts';
 
 interface TableHeaderProps {
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Book) => void;
+  onRequestSort: (_event: React.MouseEvent<unknown>, _property: keyof Book) => void;
   order: Order;
   orderBy: string;
   headers: HeadCell[];
@@ -18,7 +18,6 @@ const TableHeader: React.FC<TableHeaderProps> = ({ order, orderBy, onRequestSort
   const createSortHandler = (property: keyof Book) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
-  var element = "t";
 
   return (
     <TableHead>
