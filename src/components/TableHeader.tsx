@@ -1,49 +1,46 @@
-import * as React from "react";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Box from "@mui/material/Box";
-import {visuallyHidden} from "@mui/utils";
-import {Book, HeadCell, Order} from "../data/types.ts";
+import * as React from 'react';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import Box from '@mui/material/Box';
+import { visuallyHidden } from '@mui/utils';
+import { Book, HeadCell, Order } from '../data/types.ts';
 
 interface TableHeaderProps {
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Book) => void;
-    order: Order;
-    orderBy: string;
-    headers: HeadCell[];
+  onRequestSort: (_event: React.MouseEvent<unknown>, _property: keyof Book) => void;
+  order: Order;
+  orderBy: string;
+  headers: HeadCell[];
 }
 
-const TableHeader: React.FC<TableHeaderProps> = ({order, orderBy, onRequestSort, headers}) => {
-    const createSortHandler =
-        (property: keyof Book) => (event: React.MouseEvent<unknown>) => {
-            onRequestSort(event, property);
-        };
+const TableHeader: React.FC<TableHeaderProps> = ({ order, orderBy, onRequestSort, headers }) => {
+  const createSortHandler = (property: keyof Book) => (event: React.MouseEvent<unknown>) => {
+    onRequestSort(event, property);
+  };
 
-    return (
-        <TableHead>
-            <TableRow>
-                {headers.map((header) => (
-                    <TableCell
-                        key={header.id}
-                        sortDirection={orderBy === header.id ? order : false}
-                    >
-                        <TableSortLabel
-                            active={orderBy === header.id}
-                            direction={orderBy === header.id ? order : 'asc'}
-                            onClick={createSortHandler(header.id)}
-                        >
-                            {header.label}
-                            {orderBy === header.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
-    );
-}
+  return (
+    <TableHead>
+      <TableRow>
+        {headers.map((header) => (
+          // @TODO The whole TableCell should be clickable according to the specs
+          <TableCell key={header.id} sortDirection={orderBy === header.id ? order : false}>
+            <TableSortLabel
+              active={orderBy === header.id}
+              direction={orderBy === header.id ? order : 'asc'}
+              onClick={createSortHandler(header.id)}
+            >
+              {header.label}
+              {orderBy === header.id ? (
+                <Box component="span" sx={visuallyHidden}>
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                </Box>
+              ) : null}
+            </TableSortLabel>
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+};
 export default TableHeader;
