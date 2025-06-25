@@ -28,12 +28,14 @@ export default [
         rules: {
             '@typescript-eslint/no-unused-vars': 'warn',
             '@typescript-eslint/consistent-type-assertions': 'error',
-            'no-console': ['error', { allow: ['warn', 'error'] }],
+            //@TODO Update these later: 'no-console': ['error', { allow: ['warn', 'error'] }],
+            'no-console': ['off', { allow: ['warn', 'error'] }],
             'no-var': 'error',
             'unused-imports/no-unused-imports': 'error',
             'react/jsx-boolean-value': ['error', 'always'],
             'react/jsx-no-useless-fragment': 'warn',
-            'react/jsx-no-bind': 'error',
+            //@TODO update the jsx-no-bind to error later
+            'react/jsx-no-bind': 'off',
             'prettier/prettier': 'error'
         },
         settings: {

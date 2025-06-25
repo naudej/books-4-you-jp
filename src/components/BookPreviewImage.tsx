@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Box } from '@mui/material';
 import { useState } from 'react';
 import BookIcon from '@mui/icons-material/Book';
@@ -12,6 +13,9 @@ interface BookPreviewImageProps {
 
 const BookPreviewImage: React.FC<BookPreviewImageProps> = ({ id, title, src }) => {
   const [showThumbnail, setShowThumbnail] = useState(false);
+  const handleError = () => {
+      setShowThumbnail(true);
+  }
 
   if (showThumbnail) {
     return (
@@ -35,7 +39,7 @@ const BookPreviewImage: React.FC<BookPreviewImageProps> = ({ id, title, src }) =
     <img
       key={id}
       src={src}
-      onError={() => setShowThumbnail(true)}
+      onError={handleError}
       style={{ borderRadius: '4px' }}
       alt={title}
       width={THUMBNAIL_SIZE}
