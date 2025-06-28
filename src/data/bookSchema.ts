@@ -64,7 +64,7 @@ export const detailedBookSchema = yup.object({
     authors: yup.array().of(yup.string().required()).default([]),
     categories: yup.array().of(yup.string().required()).default([]),
     publishedDate: yup.string().required().default(''),
-    publisher: yup.string().required().default(''),
+    publisher: yup.string().default(''),
     previewLink: yup.string().required().default(''),
     industryIdentifiers: yup.array().of(industryIdentifierSchema).default([]),
     imageLinks: yup

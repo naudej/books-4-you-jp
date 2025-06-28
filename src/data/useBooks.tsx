@@ -2,23 +2,25 @@ import { useEffect, useState } from 'react';
 import { bookApiSchema } from './bookSchema.ts';
 import { Book } from './types.ts';
 import { formatPublishedDate, getIsbnNumber } from '../utils/utils.ts';
+import { useSnackbar } from '../context/SnackBarContext.tsx';
 
 type Books = {
   books: Book[];
   loading: boolean;
-  error: string | null;
+  error: boolean;
 };
 const useBooks = (searchTerm: string = 'henry') => {
   const [books, setBooks] = useState<Books>({
     books: [],
     loading: true,
-    error: null,
+    error: false,
   });
+  const { showSnackbar } = useSnackbar();
   // https://www.googleapis.com/books/v1/volumes/effBnY4hNDEC
   useEffect(() => {
     const controller = new AbortController();
     const fetchBooks = async () => {
-      setBooks({ books: [], loading: true, error: null });
+      setBooks({ books: [], loading: true, error: false });
       try {
         const response = await fetch(
           `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}`,
@@ -30,7 +32,6 @@ const useBooks = (searchTerm: string = 'henry') => {
           const { title, authors, publishedDate, categories, industryIdentifiers, imageLinks } =
             volumeInfo;
           const isbn = getIsbnNumber(industryIdentifiers);
-          //@TODO Throw error that ISBN is null
           return {
             id,
             isbn: isbn || '',
@@ -44,18 +45,21 @@ const useBooks = (searchTerm: string = 'henry') => {
         setBooks({
           books,
           loading: false,
-          error: null,
+          error: false,
         });
-      } catch (err: any) {
-        if (err.name !== 'AbortError') {
-          //@TODO Trigger snackBar
-          // console.error(err);
-          setBooks({
-            books: [],
-            loading: false,
-            error: 'Failed to fetch book.',
-          });
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          return;
         }
+        showSnackbar({
+          message: 'Failed to load book data',
+          type: 'error',
+        });
+        setBooks({
+          books: [],
+          loading: false,
+          error: true,
+        });
       }
     };
 

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Outlet } from 'react-router';
 import { ReactRouterAppProvider } from '@toolpad/core/react-router';
-import type { Navigation } from '@toolpad/core/AppProvider';
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -40,6 +39,7 @@ const BRANDING = {
 //@TODO Page Error boundary see App.tsx (libraries/client-core/src/components/layout/Page.tsx)
 //@TODO Add suspense fallback with 404 page cannot be found or something went wrong
 //@TODO NEXT STEP: LOCALIZATION
+//@TODO: Super nice to have a detector if the user is disconnected from the internet
 export default function App() {
   return (
     <ReactRouterAppProvider theme={theme} branding={BRANDING}>

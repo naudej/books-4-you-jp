@@ -2,26 +2,28 @@ import { useEffect, useState } from 'react';
 import { DetailedBook } from './types.ts';
 import { detailedBookSchema } from './bookSchema.ts';
 import { formatPublishedDate, getIsbnNumber } from '../utils/utils.ts';
+import { useSnackbar } from '../context/SnackBarContext.tsx';
 
 type BookById = {
   book: DetailedBook | null;
   loading: boolean;
-  error: string | null;
+  error: boolean;
 };
 
 const useBookById = (id?: string) => {
   const [bookById, setBookById] = useState<BookById>({
     book: null,
     loading: true,
-    error: null,
+    error: false,
   });
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (!id) {
       setBookById({
         book: null,
         loading: false,
-        error: 'No book ID provided.',
+        error: true,
       });
       return;
     }
@@ -29,7 +31,7 @@ const useBookById = (id?: string) => {
     const controller = new AbortController();
 
     const fetchBook = async () => {
-      setBookById({ book: null, loading: true, error: null });
+      setBookById({ book: null, loading: true, error: false });
 
       try {
         const response = await fetch(`https://www.googleapis.com/books/v1/volumes/${id}`, {
@@ -54,7 +56,6 @@ const useBookById = (id?: string) => {
           language,
           previewLink,
         } = volumeInfo;
-
         const isbn = getIsbnNumber(industryIdentifiers);
 
         const mappedBook: DetailedBook = {
@@ -82,17 +83,21 @@ const useBookById = (id?: string) => {
         setBookById({
           book: mappedBook,
           loading: false,
-          error: null,
+          error: false,
         });
-      } catch (err: any) {
-        if (err.name !== 'AbortError') {
-          console.error(err);
-          setBookById({
-            book: null,
-            loading: false,
-            error: 'Failed to fetch book.',
-          });
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          return;
         }
+        showSnackbar({
+          message: 'Failed to load book',
+          type: 'error',
+        });
+        setBookById({
+          book: null,
+          loading: false,
+          error: true,
+        });
       }
     };
 
