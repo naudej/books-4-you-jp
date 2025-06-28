@@ -3,31 +3,42 @@ import { DetailedBook } from './types.ts';
 import { detailedBookSchema } from './bookSchema.ts';
 import { formatPublishedDate, getIsbnNumber } from '../utils/utils.ts';
 
+type BookById = {
+  book: DetailedBook | null;
+  loading: boolean;
+  error: string | null;
+};
+
 const useBookById = (id?: string) => {
-  const [book, setBook] = useState<DetailedBook | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [bookById, setBookById] = useState<BookById>({
+    book: null,
+    loading: true,
+    error: null,
+  });
 
   useEffect(() => {
     if (!id) {
-      setLoading(false);
-      setBook(null);
-      setError('No book ID provided.');
+      setBookById({
+        book: null,
+        loading: false,
+        error: 'No book ID provided.',
+      });
       return;
     }
 
     const controller = new AbortController();
 
     const fetchBook = async () => {
-      setLoading(true);
-      setError(null);
+      setBookById({ book: null, loading: true, error: null });
 
       try {
         const response = await fetch(`https://www.googleapis.com/books/v1/volumes/${id}`, {
           signal: controller.signal,
         });
+
         const data = await response.json();
         const { id: bookId, volumeInfo, saleInfo } = await detailedBookSchema.validate(data);
+
         const {
           title,
           imageLinks,
@@ -45,7 +56,8 @@ const useBookById = (id?: string) => {
         } = volumeInfo;
 
         const isbn = getIsbnNumber(industryIdentifiers);
-        setBook({
+
+        const mappedBook: DetailedBook = {
           id: bookId,
           isbn: isbn || '',
           title,
@@ -65,14 +77,22 @@ const useBookById = (id?: string) => {
           country: saleInfo.country,
           buyLink: saleInfo.buyLink,
           retailPrice: saleInfo.retailPrice,
+        };
+
+        setBookById({
+          book: mappedBook,
+          loading: false,
+          error: null,
         });
       } catch (err: any) {
         if (err.name !== 'AbortError') {
           console.error(err);
-          setError('Failed to fetch book.');
+          setBookById({
+            book: null,
+            loading: false,
+            error: 'Failed to fetch book.',
+          });
         }
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -80,7 +100,7 @@ const useBookById = (id?: string) => {
     return () => controller.abort();
   }, [id]);
 
-  return { book, loading, error };
+  return bookById;
 };
 
 export default useBookById;

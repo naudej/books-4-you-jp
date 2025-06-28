@@ -1,21 +1,20 @@
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { Avatar, Chip, Divider, Grid, IconButton, Link } from '@mui/material';
+import { Avatar, Chip, Divider, Grid, Link } from '@mui/material';
 import { LARGE_THUMBNAIL } from '../utils/constants.ts';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import useBookById from '../data/useBookById.ts';
 import Stack from '@mui/material/Stack';
 import DOMPurify from 'dompurify';
 import BuyButton from '../components/BuyButton.tsx';
 import InfoItem from '../components/InfoItem.tsx';
 import LoadingBookDetails from '../components/LoadingBookDetails.tsx';
+import BackButton from '../components/BackButton.tsx';
 
 const BookDetails: React.FC = () => {
   const { bookId } = useParams<{ bookId: string }>();
   const { book, loading, error } = useBookById(bookId);
-  const navigate = useNavigate();
 
   //@TODO Show proper error state
   if (loading || error) {
@@ -57,9 +56,7 @@ const BookDetails: React.FC = () => {
             }}
             spacing={1}
           >
-            <IconButton aria-label="back" onClick={() => navigate(-1)}>
-              <ArrowBackIosIcon />
-            </IconButton>
+            <BackButton />
             {/*//@TODO Use BookPreviewImage here variant sm and variant lg*/}
             <Avatar
               alt={title}
@@ -69,21 +66,21 @@ const BookDetails: React.FC = () => {
               {title.charAt(0)}
             </Avatar>
             <Stack direction="column" spacing={2}>
-              <Typography noWrap variant="h5">
+              <Typography noWrap={true} variant="h5">
                 {title}
               </Typography>
               {subtitle && (
-                <Typography noWrap variant="h6" color="textSecondary">
+                <Typography noWrap={true} variant="h6" color="textSecondary">
                   {subtitle}
                 </Typography>
               )}
               <Stack
                 direction="row"
-                divider={<Divider orientation="vertical" flexItem />}
+                divider={<Divider orientation="vertical" flexItem={true} />}
                 spacing={2}
               >
                 {authors.map((author) => (
-                  <Typography noWrap color="textSecondary" variant="subtitle2" key={author}>
+                  <Typography noWrap={true} color="textSecondary" variant="subtitle2" key={author}>
                     {author}
                   </Typography>
                 ))}
@@ -95,7 +92,13 @@ const BookDetails: React.FC = () => {
             {retailPrice && buyLink && <BuyButton link={buyLink} price={retailPrice} />}
           </Stack>
         </Stack>
-        <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ maxWidth: '100%' }}>
+        <Stack
+          direction="row"
+          spacing={1}
+          useFlexGap={true}
+          flexWrap="wrap"
+          sx={{ maxWidth: '100%' }}
+        >
           {categories.map((category) => (
             <Chip label={category} variant="outlined" key={category} />
           ))}
@@ -115,10 +118,10 @@ const BookDetails: React.FC = () => {
           </Link>
         </Typography>
         <Divider />
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom={true}>
           Additional Information:
         </Typography>
-        <Grid container>
+        <Grid container={true}>
           <Grid size={6}>
             <Stack spacing={1}>
               <InfoItem label="ID" value={book.id} />
