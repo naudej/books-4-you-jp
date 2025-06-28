@@ -2,25 +2,30 @@ import * as React from 'react';
 import { Outlet, useLocation, useParams, matchPath } from 'react-router';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
+import Paper from '@mui/material/Paper';
 
 export default function Dashboard() {
   const location = useLocation();
   const { bookTitle } = useParams();
 
+  const rootPath = matchPath('/', location.pathname);
+
   const title = React.useMemo(() => {
-    if (matchPath('/', location.pathname)) {
+    if (rootPath) {
       return `Catalogue`;
     }
-    // if (matchPath('/book/:bookId', location.pathname)) {
-    //     return `${bookTitle}`;
-    // }
     return undefined;
   }, [location.pathname, bookTitle]);
 
   return (
-    <DashboardLayout hideNavigation>
+    <DashboardLayout hideNavigation={true}>
       <PageContainer title={title}>
-        <Outlet />
+        <Paper
+          elevation={3}
+          sx={{ width: '100%', height: '100%', padding: '25px', borderRadius: '10px' }}
+        >
+          <Outlet />
+        </Paper>
       </PageContainer>
     </DashboardLayout>
   );
