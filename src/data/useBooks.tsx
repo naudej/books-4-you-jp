@@ -3,16 +3,22 @@ import { bookApiSchema } from './bookSchema.ts';
 import { Book } from './types.ts';
 import { formatPublishedDate, getIsbnNumber } from '../utils/utils.ts';
 
+type Books = {
+  books: Book[];
+  loading: boolean;
+  error: string | null;
+};
 const useBooks = (searchTerm: string = 'henry') => {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [books, setBooks] = useState<Books>({
+    books: [],
+    loading: true,
+    error: null,
+  });
   // https://www.googleapis.com/books/v1/volumes/effBnY4hNDEC
   useEffect(() => {
     const controller = new AbortController();
     const fetchBooks = async () => {
-      setLoading(true);
-      setError(null);
+      setBooks({ books: [], loading: true, error: null });
       try {
         const response = await fetch(
           `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}`,
@@ -35,15 +41,21 @@ const useBooks = (searchTerm: string = 'henry') => {
             thumbnail: imageLinks?.thumbnail || '',
           };
         });
-        setBooks(books);
+        setBooks({
+          books,
+          loading: false,
+          error: null,
+        });
       } catch (err: any) {
         if (err.name !== 'AbortError') {
           //@TODO Trigger snackBar
           // console.error(err);
-          setError('Failed to fetch books.');
+          setBooks({
+            books: [],
+            loading: false,
+            error: 'Failed to fetch book.',
+          });
         }
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -51,6 +63,6 @@ const useBooks = (searchTerm: string = 'henry') => {
     return () => controller.abort();
   }, [searchTerm]);
 
-  return { books, loading, error };
+  return books;
 };
 export default useBooks;
