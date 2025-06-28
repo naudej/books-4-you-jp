@@ -18,6 +18,7 @@
     "@mui/material": "^7.1.2",
     "@toolpad/core": "^0.16.0",
     "date-fns": "^4.1.0",
+    "dompurify": "^3.2.6",
     "lodash": "^4.17.21",
     "react": "latest",
     "react-dom": "latest",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
+    "@types/dompurify": "^3.2.0",
     "@types/lodash": "^4.17.18",
     "@types/react": "latest",
     "@types/react-dom": "latest",

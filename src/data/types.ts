@@ -30,3 +30,22 @@ export type Book = {
 };
 
 export type IndustryIdentifier = InferType<typeof industryIdentifierSchema>;
+
+export type DetailedBook = Book & {
+  description?: string;
+  pageCount?: string;
+  averageRating?: string;
+  language: string;
+  publisher: string;
+  previewLink: string;
+  industryIdentifiers: IndustryIdentifier[];
+  saleability: 'FOR_SALE' | 'NOT_FOR_SALE' | 'FREE';
+  country: string;
+  buyLink?: string;
+  retailPrice?: RetailPrice;
+};
+
+export type RetailPrice = {
+  amount: number;
+  currencyCode: string;
+};

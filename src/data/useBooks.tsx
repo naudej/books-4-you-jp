@@ -1,39 +1,13 @@
 import { useEffect, useState } from 'react';
 import { bookApiSchema } from './bookSchema.ts';
-import { Book, IndustryIdentifier, ISBN_TYPES } from './types.ts';
-import { parse, format as dateFormat, isValid } from 'date-fns';
+import { Book } from './types.ts';
+import { formatPublishedDate, getIsbnNumber } from '../utils/utils.ts';
 
-const getIsbnNumber = (industryIdentifiers: IndustryIdentifier[]) => {
-  const isbn13 = industryIdentifiers.find((isbn) => isbn.type === ISBN_TYPES.ISBN_13);
-  if (isbn13 && isbn13.identifier) {
-    return isbn13.identifier;
-  }
-  const isbn10 = industryIdentifiers.find((isbn) => isbn.type === ISBN_TYPES.ISBN_10);
-  if (isbn10 && isbn10.identifier) {
-    return isbn10.identifier;
-  }
-
-  return null;
-};
-
-export const formatPublishedDate = (input: string): string => {
-  const acceptedFormats = ['yyyy-MM-dd', 'yyyy-MM', 'yyyy'];
-
-  for (const format of acceptedFormats) {
-    const parsed = parse(input, format, new Date());
-    if (isValid(parsed)) {
-      return dateFormat(parsed, 'dd/MM/yyyy');
-    }
-  }
-
-  return 'Unknown';
-};
-
-export function useBookData(searchTerm: string = 'henry') {
+const useBooks = (searchTerm: string = 'henry') => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
+  // https://www.googleapis.com/books/v1/volumes/effBnY4hNDEC
   useEffect(() => {
     const controller = new AbortController();
     const fetchBooks = async () => {
@@ -65,7 +39,7 @@ export function useBookData(searchTerm: string = 'henry') {
       } catch (err: any) {
         if (err.name !== 'AbortError') {
           //@TODO Trigger snackBar
-          console.error(err);
+          // console.error(err);
           setError('Failed to fetch books.');
         }
       } finally {
@@ -78,4 +52,5 @@ export function useBookData(searchTerm: string = 'henry') {
   }, [searchTerm]);
 
   return { books, loading, error };
-}
+};
+export default useBooks;

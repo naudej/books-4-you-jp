@@ -1,9 +1,9 @@
 import * as React from 'react';
 import BooksTable from '../components/BooksTable.tsx';
-import { useBookData } from '../data/useBookData.tsx';
 import { HeadCell, SearchOption } from '../data/types.ts';
 import { Box } from '@mui/material';
 import SearchInput from '../components/SearchInput.tsx';
+import useBooks from '../data/useBooks.tsx';
 
 const CatalogueHeaders: HeadCell[] = [
   {
@@ -33,10 +33,10 @@ const CatalogueHeaders: HeadCell[] = [
 ];
 
 const Catalogue: React.FC = () => {
-  const { books, loading } = useBookData();
+  const { books, loading } = useBooks('Harry');
   const searchOptions: SearchOption[] = books.map(({ id, title }) => ({ id, title }));
   const handleSearch = (value: string) => {
-    console.log(value);
+    // console.log(value);
   };
 
   return (
