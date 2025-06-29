@@ -1,77 +1,78 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Autocomplete, TextField, CircularProgress, Box, Typography } from '@mui/material';
-import { debounce } from 'lodash';
+import React from 'react';
+import {
+  Autocomplete,
+  TextField,
+  CircularProgress,
+  Box,
+  Typography,
+  IconButton,
+} from '@mui/material';
 import { SearchOption } from '../data/types.ts';
+import SearchIcon from '@mui/icons-material/Search';
 
 interface SearchInputProps {
-  initialValues?: SearchOption[];
-  onSearch: (value: string) => void;
+  options?: SearchOption[];
+  onInputChange: (value: string) => void;
+  onSearchSubmit: (value: string) => void;
+  onOptionSelect: (option: SearchOption) => void;
   loading: boolean;
+  error: boolean;
   label: string;
   placeholder: string;
+  inputValue: string;
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
-  initialValues = [],
-  onSearch,
+  options = [],
+  onInputChange,
+  onSearchSubmit,
   loading,
   label,
   placeholder,
+  error,
+  inputValue,
+  onOptionSelect,
 }) => {
-  const [query, setQuery] = useState('');
-  console.log({ initialValues, onSearch, loading });
-
-  // Debounced API fetch
-  // const fetchBooks = useMemo(
-  //     () =>
-  //         debounce(async (searchTerm: string) => {
-  //             setLoading(true)
-  //             try {
-  //                 const res = await fetch(
-  //                     `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
-  //                         searchTerm,
-  //                     )}`,
-  //                 )
-  //                 const data = await res.json()
-  //                 const items = data.items || []
-  //                 const results: BookOption[] = items.map((item: any) => ({
-  //                     id: item.id,
-  //                     title: item.volumeInfo.title,
-  //                 }))
-  //                 setOptions(results)
-  //             } catch (err) {
-  //                 console.error('Error fetching books:', err)
-  //                 setOptions([])
-  //             } finally {
-  //                 setLoading(false)
-  //             }
-  //         }, 500),
-  //     [],
-  // )
-
-  useEffect(() => {
-    if (query.trim().length >= 3) {
-      onSearch(query);
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && inputValue.trim().length >= 3) {
+      onSearchSubmit(inputValue);
     }
-  }, [query, onSearch]);
+  };
+
+  const handleIconClick = () => {
+    if (inputValue.trim().length >= 3) {
+      onSearchSubmit(inputValue);
+    }
+  };
 
   return (
     <Box maxWidth={500}>
       <Autocomplete
-        options={initialValues}
+        disabled={error}
+        options={options}
         getOptionLabel={(option) => option.title}
         loading={loading}
-        onInputChange={(_, value) => setQuery(value)}
+        inputValue={inputValue}
+        onChange={(_, selectedOption) => {
+          if (selectedOption) {
+            onOptionSelect(selectedOption);
+          }
+        }}
+        onInputChange={(_, value) => onInputChange(value)}
         renderInput={(params) => (
           <TextField
             {...params}
             label={label}
+            onKeyPress={handleKeyPress}
             placeholder={placeholder}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
                 <>
                   {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                  <IconButton aria-label="delete" onClick={handleIconClick}>
+                    <SearchIcon />
+                  </IconButton>
                   {params.InputProps.endAdornment}
                 </>
               ),
