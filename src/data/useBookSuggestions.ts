@@ -7,7 +7,7 @@ import { useSnackbar } from '../context/SnackBarContext.tsx';
 
 const useBookSuggestions = () => {
   const [searchOptions, setSearchOptions] = useState<SearchOption[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const { showSnackbar } = useSnackbar();
 
   const fetchSuggestions = useMemo(
