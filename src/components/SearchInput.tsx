@@ -33,7 +33,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
   inputValue,
   onOptionSelect,
 }) => {
-  console.log({ loading });
   const handleKeyPress = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && inputValue.trim().length >= 3) {
       onSearchSubmit(inputValue);
