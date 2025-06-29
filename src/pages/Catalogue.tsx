@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import SearchInput from '../components/SearchInput.tsx';
 import useBooks from '../data/useBooks.tsx';
 import { useSearchParams } from 'react-router';
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
 
 const CatalogueHeaders: HeadCell[] = [
@@ -37,37 +37,75 @@ const CatalogueHeaders: HeadCell[] = [
 
 const Catalogue: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const queryParam = searchParams.get('q') || 'Harry';
-  const { books, loading, error } = useBooks(queryParam);
-  const searchOptions: SearchOption[] = books.map(({ id, title }) => ({ id, title }));
+  const searchTerm = searchParams.get('q') || 'harry';
+  const { books, loading, error } = useBooks(searchTerm);
+  const [inputValue, setInputValue] = useState(searchTerm);
+  const initialValues: SearchOption[] = books.map(({ id, title }) => ({ id, title }));
+  const [autocompleteOptions, setAutocompleteOptions] = useState<SearchOption[]>([]);
 
-  const debouncedSearch = useMemo(
+  useEffect(() => {
+    // console.log('TRIGGERED');
+    setInputValue(searchTerm);
+  }, [searchTerm]);
+
+  const debouncedFetchSuggestions = useMemo(
     () =>
-      debounce((value: string) => {
-        setSearchParams({ q: value });
+      debounce(async (value: string) => {
+        if (value.length < 3) return;
+
+        try {
+          const res = await fetch(
+            `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(value)}`,
+          );
+          const json = await res.json();
+          const items = json.items || [];
+          const options: SearchOption[] = items.map((b: any) => ({
+            id: b.id,
+            title: b.volumeInfo?.title ?? '',
+          }));
+          setAutocompleteOptions(options);
+        } catch (err) {
+          console.error('Autocomplete fetch failed:', err);
+        }
       }, 400),
+    [],
+  );
+
+  const handleAutocompleteInputChange = useCallback(
+    (value: string) => {
+      setInputValue(value);
+      debouncedFetchSuggestions(value);
+    },
+    [debouncedFetchSuggestions],
+  );
+
+  const handleSearchSubmit = useCallback(
+    (value: string) => {
+      setSearchParams({ q: value });
+    },
     [setSearchParams],
   );
 
-  const handleSearch = React.useCallback(
-    (value: string) => {
-      if (value.trim().length >= 3) {
-        debouncedSearch(value);
-      }
+  const handleOptionSelect = useCallback(
+    (option: SearchOption) => {
+      setSearchParams({ q: option.title });
     },
-    [debouncedSearch],
+    [setSearchParams],
   );
 
   return (
     <Box>
       <Box mb={4}>
         <SearchInput
+          onOptionSelect={handleOptionSelect}
+          inputValue={inputValue}
           error={error}
           label="Search Books"
           placeholder="Start typing to find a book"
-          initialValues={searchOptions}
+          initialValues={autocompleteOptions.length > 0 ? autocompleteOptions : initialValues}
           loading={loading}
-          onSearch={handleSearch}
+          onInputChange={handleAutocompleteInputChange}
+          onSearchSubmit={handleSearchSubmit}
         />
       </Box>
       <BooksTable books={books} tableHeaders={CatalogueHeaders} loading={loading} />
