@@ -44,10 +44,10 @@ const Catalogue: React.FC = () => {
   const [autocompleteOptions, setAutocompleteOptions] = useState<SearchOption[]>([]);
 
   useEffect(() => {
-    // console.log('TRIGGERED');
     setInputValue(searchTerm);
   }, [searchTerm]);
 
+  //@TODO Have a look at refactoring
   const debouncedFetchSuggestions = useMemo(
     () =>
       debounce(async (value: string) => {
@@ -81,6 +81,7 @@ const Catalogue: React.FC = () => {
 
   const handleSearchSubmit = useCallback(
     (value: string) => {
+      setInputValue('');
       setSearchParams({ q: value });
     },
     [setSearchParams],
@@ -88,6 +89,7 @@ const Catalogue: React.FC = () => {
 
   const handleOptionSelect = useCallback(
     (option: SearchOption) => {
+      setInputValue(option.title); // immediately reflect selected option
       setSearchParams({ q: option.title });
     },
     [setSearchParams],
