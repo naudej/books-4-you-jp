@@ -11,7 +11,7 @@ import { SearchOption } from '../data/types.ts';
 import SearchIcon from '@mui/icons-material/Search';
 
 interface SearchInputProps {
-  initialValues?: SearchOption[];
+  options?: SearchOption[];
   onInputChange: (value: string) => void;
   onSearchSubmit: (value: string) => void;
   onOptionSelect: (option: SearchOption) => void;
@@ -23,7 +23,7 @@ interface SearchInputProps {
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
-  initialValues = [],
+  options = [],
   onInputChange,
   onSearchSubmit,
   loading,
@@ -33,6 +33,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   inputValue,
   onOptionSelect,
 }) => {
+  console.log({ loading });
   const handleKeyPress = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && inputValue.trim().length >= 3) {
       onSearchSubmit(inputValue);
@@ -49,7 +50,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     <Box maxWidth={500}>
       <Autocomplete
         disabled={error}
-        options={initialValues}
+        options={options}
         getOptionLabel={(option) => option.title}
         loading={loading}
         inputValue={inputValue}

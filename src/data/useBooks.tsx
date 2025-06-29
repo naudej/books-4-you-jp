@@ -3,6 +3,7 @@ import { bookApiSchema } from './bookSchema.ts';
 import { Book } from './types.ts';
 import { formatPublishedDate, getIsbnNumber } from '../utils/utils.ts';
 import { useSnackbar } from '../context/SnackBarContext.tsx';
+import { API_BASE_URL } from '../utils/constants.ts';
 
 type Books = {
   books: Book[];
@@ -22,10 +23,9 @@ const useBooks = (searchTerm: string = 'henry') => {
     const fetchBooks = async () => {
       setBooks({ books: [], loading: true, error: false });
       try {
-        const response = await fetch(
-          `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}`,
-          { signal: controller.signal },
-        );
+        const response = await fetch(`${API_BASE_URL}?q=${encodeURIComponent(searchTerm)}`, {
+          signal: controller.signal,
+        });
         const data = await response.json();
         const { items } = await bookApiSchema.validate(data);
         const books: Book[] = items.map(({ id, volumeInfo }) => {

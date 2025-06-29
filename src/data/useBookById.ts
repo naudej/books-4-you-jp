@@ -3,6 +3,7 @@ import { DetailedBook } from './types.ts';
 import { detailedBookSchema } from './bookSchema.ts';
 import { formatPublishedDate, getIsbnNumber } from '../utils/utils.ts';
 import { useSnackbar } from '../context/SnackBarContext.tsx';
+import { API_BASE_URL } from '../utils/constants.ts';
 
 type BookById = {
   book: DetailedBook | null;
@@ -34,7 +35,7 @@ const useBookById = (id?: string) => {
       setBookById({ book: null, loading: true, error: false });
 
       try {
-        const response = await fetch(`https://www.googleapis.com/books/v1/volumes/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/${id}`, {
           signal: controller.signal,
         });
 

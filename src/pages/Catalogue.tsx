@@ -5,8 +5,8 @@ import { Box } from '@mui/material';
 import SearchInput from '../components/SearchInput.tsx';
 import useBooks from '../data/useBooks.tsx';
 import { useSearchParams } from 'react-router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { debounce } from 'lodash';
+import { useCallback, useEffect, useState } from 'react';
+import useBookSuggestions from '../data/useBookSuggestions.ts';
 
 const CatalogueHeaders: HeadCell[] = [
   {
@@ -41,42 +41,19 @@ const Catalogue: React.FC = () => {
   const { books, loading, error } = useBooks(searchTerm);
   const [inputValue, setInputValue] = useState(searchTerm);
   const initialValues: SearchOption[] = books.map(({ id, title }) => ({ id, title }));
-  const [autocompleteOptions, setAutocompleteOptions] = useState<SearchOption[]>([]);
+  //@TODO need a loading state for the suggestions
+  const { searchOptions, fetchSuggestions } = useBookSuggestions();
 
   useEffect(() => {
     setInputValue(searchTerm);
   }, [searchTerm]);
 
-  //@TODO Have a look at refactoring
-  const debouncedFetchSuggestions = useMemo(
-    () =>
-      debounce(async (value: string) => {
-        if (value.length < 3) return;
-
-        try {
-          const res = await fetch(
-            `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(value)}`,
-          );
-          const json = await res.json();
-          const items = json.items || [];
-          const options: SearchOption[] = items.map((b: any) => ({
-            id: b.id,
-            title: b.volumeInfo?.title ?? '',
-          }));
-          setAutocompleteOptions(options);
-        } catch (err) {
-          console.error('Autocomplete fetch failed:', err);
-        }
-      }, 400),
-    [],
-  );
-
   const handleAutocompleteInputChange = useCallback(
     (value: string) => {
       setInputValue(value);
-      debouncedFetchSuggestions(value);
+      fetchSuggestions(value);
     },
-    [debouncedFetchSuggestions],
+    [fetchSuggestions],
   );
 
   const handleSearchSubmit = useCallback(
@@ -104,7 +81,7 @@ const Catalogue: React.FC = () => {
           error={error}
           label="Search Books"
           placeholder="Start typing to find a book"
-          initialValues={autocompleteOptions.length > 0 ? autocompleteOptions : initialValues}
+          options={searchOptions.length > 0 ? searchOptions : initialValues}
           loading={loading}
           onInputChange={handleAutocompleteInputChange}
           onSearchSubmit={handleSearchSubmit}
