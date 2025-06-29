@@ -2,17 +2,25 @@ import { useEffect, useState } from 'react';
 import { bookApiSchema } from './bookSchema.ts';
 import { Book } from './types.ts';
 import { formatPublishedDate, getIsbnNumber } from '../utils/utils.ts';
+import { useSnackbar } from '../context/SnackBarContext.tsx';
 
+type Books = {
+  books: Book[];
+  loading: boolean;
+  error: boolean;
+};
 const useBooks = (searchTerm: string = 'henry') => {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [books, setBooks] = useState<Books>({
+    books: [],
+    loading: true,
+    error: false,
+  });
+  const { showSnackbar } = useSnackbar();
   // https://www.googleapis.com/books/v1/volumes/effBnY4hNDEC
   useEffect(() => {
     const controller = new AbortController();
     const fetchBooks = async () => {
-      setLoading(true);
-      setError(null);
+      setBooks({ books: [], loading: true, error: false });
       try {
         const response = await fetch(
           `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}`,
@@ -24,7 +32,6 @@ const useBooks = (searchTerm: string = 'henry') => {
           const { title, authors, publishedDate, categories, industryIdentifiers, imageLinks } =
             volumeInfo;
           const isbn = getIsbnNumber(industryIdentifiers);
-          //@TODO Throw error that ISBN is null
           return {
             id,
             isbn: isbn || '',
@@ -35,15 +42,24 @@ const useBooks = (searchTerm: string = 'henry') => {
             thumbnail: imageLinks?.thumbnail || '',
           };
         });
-        setBooks(books);
-      } catch (err: any) {
-        if (err.name !== 'AbortError') {
-          //@TODO Trigger snackBar
-          // console.error(err);
-          setError('Failed to fetch books.');
+        setBooks({
+          books,
+          loading: false,
+          error: false,
+        });
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          return;
         }
-      } finally {
-        setLoading(false);
+        showSnackbar({
+          message: 'Failed to load book data',
+          type: 'error',
+        });
+        setBooks({
+          books: [],
+          loading: false,
+          error: true,
+        });
       }
     };
 
@@ -51,6 +67,6 @@ const useBooks = (searchTerm: string = 'henry') => {
     return () => controller.abort();
   }, [searchTerm]);
 
-  return { books, loading, error };
+  return books;
 };
 export default useBooks;

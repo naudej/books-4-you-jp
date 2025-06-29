@@ -50,7 +50,7 @@ const Catalogue: React.FC = () => {
           onSearch={handleSearch}
         />
       </Box>
-      <BooksTable books={books} tableHeaders={CatalogueHeaders} />
+      <BooksTable books={books} tableHeaders={CatalogueHeaders} loading={loading} />
     </Box>
   );
 };
