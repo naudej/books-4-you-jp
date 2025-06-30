@@ -1,12 +1,14 @@
 import * as React from 'react';
 import BooksTable from '../components/BooksTable.tsx';
 import { HeadCell, SearchOption } from '../data/types.ts';
-import { Stack } from '@mui/material';
+import { Button, Grid, Stack } from '@mui/material';
 import SearchInput from '../components/SearchInput.tsx';
 import useBooks from '../data/useBooks.tsx';
-import { useSearchParams } from 'react-router';
+import { useMatch, useNavigate, useSearchParams } from 'react-router';
 import { useCallback, useEffect, useState } from 'react';
 import useBookSuggestions from '../data/useBookSuggestions.ts';
+import AddIcon from '@mui/icons-material/Add';
+import AddBook from '../form/AddBook.tsx';
 
 const CatalogueHeaders: HeadCell[] = [
   {
@@ -41,8 +43,9 @@ const Catalogue: React.FC = () => {
   const { books, loading, error } = useBooks(searchTerm);
   const [inputValue, setInputValue] = useState(searchTerm);
   const initialValues: SearchOption[] = books.map(({ id, title }) => ({ id, title }));
-  //@TODO need a loading state for the suggestions
   const { searchOptions, fetchSuggestions, loading: loadingSuggestions } = useBookSuggestions();
+  const navigate = useNavigate();
+  const openCreate = useMatch('/create');
 
   useEffect(() => {
     setInputValue(searchTerm);
@@ -74,18 +77,31 @@ const Catalogue: React.FC = () => {
 
   return (
     <Stack spacing={4}>
-      <SearchInput
-        onOptionSelect={handleOptionSelect}
-        inputValue={inputValue}
-        error={error}
-        label="Search Books"
-        placeholder="Start typing to find a book"
-        options={searchOptions.length > 0 ? searchOptions : initialValues}
-        loading={loadingSuggestions}
-        onInputChange={handleAutocompleteInputChange}
-        onSearchSubmit={handleSearchSubmit}
-      />
+      <Grid
+        container={true}
+        direction="row"
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <SearchInput
+          onOptionSelect={handleOptionSelect}
+          inputValue={inputValue}
+          error={error}
+          label="Search Books"
+          placeholder="Start typing to find a book"
+          options={searchOptions.length > 0 ? searchOptions : initialValues}
+          loading={loadingSuggestions}
+          onInputChange={handleAutocompleteInputChange}
+          onSearchSubmit={handleSearchSubmit}
+        />
+        <Button variant="contained" onClick={() => navigate('/create')} endIcon={<AddIcon />}>
+          Add Book
+        </Button>
+      </Grid>
       <BooksTable books={books} tableHeaders={CatalogueHeaders} loading={loading} />
+      <AddBook open={Boolean(openCreate)} />
     </Stack>
   );
 };
