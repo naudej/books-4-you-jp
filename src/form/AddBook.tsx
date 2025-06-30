@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import {
   Drawer,
   Button,
@@ -11,6 +11,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  InputBaseComponentProps,
 } from '@mui/material';
 import { useNavigate } from 'react-router';
 import CloseIcon from '@mui/icons-material/Close';
@@ -19,6 +20,10 @@ import * as yup from 'yup';
 import { InferType } from 'yup';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { IMaskInput } from 'react-imask';
+
+const isbn10Mask = '0-0000-0000-0';
+const isbn13Mask = '000-0-000-00000-0';
 
 const validationSchema = yup.object({
   title: yup.string().required('Every book needs a title'),
@@ -32,6 +37,25 @@ const validationSchema = yup.object({
 });
 
 type FormFields = InferType<typeof validationSchema>;
+
+interface ISBNMaskProps extends InputBaseComponentProps {
+  mask: string;
+}
+
+const ISBNMask = forwardRef<HTMLInputElement, ISBNMaskProps>(function ISBNMask(
+  { onChange, mask, name, ...other },
+  ref,
+) {
+  return (
+    <IMaskInput
+      {...other}
+      mask={mask}
+      inputRef={ref}
+      onAccept={(value) => onChange({ target: { name, value } })}
+      overwrite={true}
+    />
+  );
+});
 
 interface AddBookProps {
   open: boolean;
@@ -147,8 +171,6 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
               </RadioGroup>
             </FormControl>
             <TextField
-              fullWidth={true}
-              id="isbn"
               name="isbn"
               label="ISBN"
               value={values.isbn}
@@ -156,6 +178,12 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
               onBlur={handleBlur}
               error={touched.isbn && Boolean(errors.isbn)}
               helperText={touched.isbn && errors.isbn}
+              InputProps={{
+                inputComponent: ISBNMask,
+                inputProps: {
+                  mask: values.isbnType === 'ISBN_10' ? isbn10Mask : isbn13Mask,
+                },
+              }}
             />
           </Stack>
           <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end' }}>
