@@ -21,6 +21,7 @@ import { InferType } from 'yup';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { IMaskInput } from 'react-imask';
+import { ISBN_TYPES } from '../data/types.ts';
 
 const isbn10Mask = '0-0000-0000-0';
 const isbn13Mask = '000-0-000-00000-0';
@@ -32,7 +33,7 @@ const validationSchema = yup.object({
     .min(2, 'A name should at least have more than 2 letters')
     .required('Was the book written by a ghost?'),
   publishedDate: yup.date().required('Published date is required').typeError('Invalid date'),
-  isbnType: yup.string().oneOf(['ISBN_10', 'ISBN_13']).required('Please select ISBN type'),
+  isbnType: yup.string().oneOf(Object.values(ISBN_TYPES)).required('Please select ISBN type'),
   isbn: yup.string().required('Librarians would be mad without this, please dont make one cry'),
 });
 
@@ -69,7 +70,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
         title: '',
         author: '',
         publishedDate: new Date(),
-        isbnType: 'ISBN_13',
+        isbnType: ISBN_TYPES.ISBN_13,
         isbn: '',
       },
       validationSchema: validationSchema,
@@ -77,6 +78,8 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
         console.log({ values });
       },
     });
+
+  const isbnMask = values.isbnType === ISBN_TYPES.ISBN_10 ? isbn10Mask : isbn13Mask;
 
   const handleClose = (
     _event: React.KeyboardEvent | React.MouseEvent,
@@ -166,8 +169,8 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
                 value={values.isbnType}
                 onChange={handleChange}
               >
-                <FormControlLabel value="ISBN_10" control={<Radio />} label="ISBN-10" />
-                <FormControlLabel value="ISBN_13" control={<Radio />} label="ISBN-13" />
+                <FormControlLabel value={ISBN_TYPES.ISBN_10} control={<Radio />} label="ISBN-10" />
+                <FormControlLabel value={ISBN_TYPES.ISBN_13} control={<Radio />} label="ISBN-13" />
               </RadioGroup>
             </FormControl>
             <TextField
@@ -181,7 +184,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
               InputProps={{
                 inputComponent: ISBNMask,
                 inputProps: {
-                  mask: values.isbnType === 'ISBN_10' ? isbn10Mask : isbn13Mask,
+                  mask: isbnMask,
                 },
               }}
             />
