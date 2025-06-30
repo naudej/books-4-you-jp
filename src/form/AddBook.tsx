@@ -44,7 +44,7 @@ interface ISBNMaskProps extends InputBaseComponentProps {
 }
 
 const ISBNMask = forwardRef<HTMLInputElement, ISBNMaskProps>(function ISBNMask(
-  { onChange, mask, name, ...other },
+  { onChange, mask, name, onBlur, ...other },
   ref,
 ) {
   return (
@@ -53,6 +53,13 @@ const ISBNMask = forwardRef<HTMLInputElement, ISBNMaskProps>(function ISBNMask(
       mask={mask}
       inputRef={ref}
       onAccept={(value) => onChange({ target: { name, value } })}
+      onBlur={() =>
+        onBlur({
+          target: {
+            name,
+          },
+        })
+      }
       overwrite={true}
     />
   );
