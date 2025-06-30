@@ -47,6 +47,10 @@ const validationSchema = yup.object({
   author: yup
     .string()
     .min(2, 'A name should at least have more than 2 letters')
+    .matches(
+      /^\D*$/,
+      'Only Elon Musk would burden his child with digits in their name, dont be that person too.',
+    )
     .required('Was the book written by a ghost?'),
   publishedDate: yup.date().required('Published date is required').typeError('Invalid date'),
   isbnType: yup.string().oneOf(Object.values(ISBN_TYPES)).required('Please select ISBN type'),
@@ -106,6 +110,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
     handleBlur,
     setFieldValue,
     isValid,
+    resetForm,
   } = useFormik<FormFields>({
     initialValues: {
       title: '',
@@ -135,26 +140,25 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
 
   return (
     <Drawer anchor="right" open={open} onClose={handleClose}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ height: '90%' }}>
         <Stack
           direction="column"
           spacing={2}
           sx={{
             width: 500,
-            p: 5,
+            padding: '15px 40px',
             marginTop: '80px',
             justifyContent: 'space-between',
             height: '100%',
           }}
         >
-          <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h5">Create your book</Typography>
-            <IconButton aria-label="back" onClick={() => navigate(-1)}>
-              <CloseIcon />
-            </IconButton>
-          </Stack>
-
           <Stack direction="column" spacing={3}>
+            <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="h5">Create your book</Typography>
+              <IconButton aria-label="back" onClick={() => navigate(-1)}>
+                <CloseIcon />
+              </IconButton>
+            </Stack>
             <TextField
               autoFocus={true}
               required={true}
@@ -193,6 +197,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
                   textField: {
                     fullWidth: true,
                     onBlur: handleBlur,
+                    required: true,
                     error: touched.publishedDate && Boolean(errors.publishedDate),
                     helperText:
                       touched.publishedDate && typeof errors.publishedDate === 'string'
@@ -202,7 +207,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
                 }}
               />
             </LocalizationProvider>
-            <FormControl component="fieldset">
+            <FormControl required={true} component="fieldset">
               <FormLabel component="legend">ISBN Type</FormLabel>
               <RadioGroup
                 row={true}
@@ -217,6 +222,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
             <TextField
               name="isbn"
               label="ISBN"
+              required={true}
               value={values.isbn}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -232,6 +238,9 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
           </Stack>
           <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end' }}>
             <Button onClick={() => navigate(-1)}>Close</Button>
+            <Button onClick={() => resetForm()} color="warning">
+              Reset
+            </Button>
             <Button color="primary" disabled={!isValid} variant="contained" type="submit">
               Submit
             </Button>
