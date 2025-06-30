@@ -23,8 +23,25 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { IMaskInput } from 'react-imask';
 import { ISBN_TYPES } from '../data/types.ts';
 import isISBN from 'validator/es/lib/isISBN';
-const isbn10Mask = '0-0000-0000-0';
-const isbn13Mask = '000-0-000-00000-0';
+
+import type { MaskedPattern } from 'imask';
+
+type ISBNMask = {
+  mask: string;
+  blocks?: NonNullable<MaskedPattern['blocks']>; //excludes null and undefined from MaskedPattern
+};
+export const isbn10Mask: ISBNMask = {
+  mask: '0-0000-0000-`',
+  blocks: {
+    '`': {
+      mask: /^[0-9Xx]$/,
+    },
+  },
+};
+
+export const isbn13Mask: ISBNMask = {
+  mask: '000-0-000-00000-0',
+};
 
 const validationSchema = yup.object({
   title: yup.string().required('Every book needs a title'),
@@ -50,17 +67,17 @@ const validationSchema = yup.object({
 type FormFields = InferType<typeof validationSchema>;
 
 interface ISBNMaskProps extends InputBaseComponentProps {
-  mask: string;
+  maskOptions: ISBNMask;
 }
 
-const ISBNMask = forwardRef<HTMLInputElement, ISBNMaskProps>(function ISBNMask(
-  { onChange, mask, name, onBlur, ...other },
+const ISBNMaskInput = forwardRef<HTMLInputElement, ISBNMaskProps>(function ISBNMask(
+  { onChange, maskOptions, name, onBlur, ...other },
   ref,
 ) {
   return (
     <IMaskInput
       {...other}
-      mask={mask}
+      {...maskOptions}
       inputRef={ref}
       onAccept={(value) => onChange({ target: { name, value } })}
       onBlur={() =>
@@ -199,9 +216,9 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
               error={touched.isbn && Boolean(errors.isbn)}
               helperText={touched.isbn && errors.isbn}
               InputProps={{
-                inputComponent: ISBNMask,
+                inputComponent: ISBNMaskInput,
                 inputProps: {
-                  mask: isbnMask,
+                  maskOptions: isbnMask,
                 },
               }}
             />
