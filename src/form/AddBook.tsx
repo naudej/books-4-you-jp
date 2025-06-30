@@ -23,12 +23,11 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { IMaskInput } from 'react-imask';
 import { ISBN_TYPES } from '../data/types.ts';
 import isISBN from 'validator/es/lib/isISBN';
-
 import type { MaskedPattern } from 'imask';
 
 type ISBNMask = {
   mask: string;
-  blocks?: NonNullable<MaskedPattern['blocks']>; //excludes null and undefined from MaskedPattern
+  blocks?: MaskedPattern['blocks']; //excludes null and undefined from MaskedPattern
 };
 export const isbn10Mask: ISBNMask = {
   mask: '0-0000-0000-`',
@@ -98,20 +97,28 @@ interface AddBookProps {
 //@TODO improvement move Textfields to another component that avoids all the bloat added to the Textfield e.g. <Input name="author" value={values.title} /> somehow uses the values.title to call the correct helpers, maybe can use FormikContext or useFormik here
 const AddBook: React.FC<AddBookProps> = ({ open }) => {
   const navigate = useNavigate();
-  const { handleSubmit, values, touched, errors, handleChange, handleBlur, setFieldValue } =
-    useFormik<FormFields>({
-      initialValues: {
-        title: '',
-        author: '',
-        publishedDate: new Date(),
-        isbnType: ISBN_TYPES.ISBN_13,
-        isbn: '',
-      },
-      validationSchema: validationSchema,
-      onSubmit: (values) => {
-        console.log({ values });
-      },
-    });
+  const {
+    handleSubmit,
+    values,
+    touched,
+    errors,
+    handleChange,
+    handleBlur,
+    setFieldValue,
+    isValid,
+  } = useFormik<FormFields>({
+    initialValues: {
+      title: '',
+      author: '',
+      publishedDate: new Date(),
+      isbnType: ISBN_TYPES.ISBN_13,
+      isbn: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log({ values });
+    },
+  });
 
   const isbnMask = values.isbnType === ISBN_TYPES.ISBN_10 ? isbn10Mask : isbn13Mask;
 
@@ -225,7 +232,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
           </Stack>
           <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end' }}>
             <Button onClick={() => navigate(-1)}>Close</Button>
-            <Button color="primary" variant="contained" type="submit">
+            <Button color="primary" disabled={!isValid} variant="contained" type="submit">
               Submit
             </Button>
           </Stack>
