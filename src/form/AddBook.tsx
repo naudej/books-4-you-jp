@@ -24,6 +24,7 @@ import { IMaskInput } from 'react-imask';
 import { ISBN_TYPES } from '../data/types.ts';
 import isISBN from 'validator/es/lib/isISBN';
 import type { MaskedPattern } from 'imask';
+import { HEIGHT_NAVBAR } from '../utils/constants.ts';
 
 type ISBNMask = {
   mask: string;
@@ -139,15 +140,26 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
   };
 
   return (
-    <Drawer anchor="right" open={open} onClose={handleClose}>
-      <form onSubmit={handleSubmit} style={{ height: '90%' }}>
+    <Drawer
+      anchor="right"
+      open={open}
+      onClose={handleClose}
+      slotProps={{
+        paper: {
+          sx: {
+            height: `calc(100% - ${HEIGHT_NAVBAR})`,
+            top: HEIGHT_NAVBAR,
+          },
+        },
+      }}
+    >
+      <form onSubmit={handleSubmit} style={{ height: '100%' }}>
         <Stack
           direction="column"
           spacing={2}
           sx={{
             width: 500,
             padding: '15px 40px',
-            marginTop: '80px',
             justifyContent: 'space-between',
             height: '100%',
           }}
