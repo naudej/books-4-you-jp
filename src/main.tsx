@@ -23,6 +23,10 @@ const router = createBrowserRouter([
             path: '/book/:bookId/*',
             Component: BookDetails,
           },
+          {
+            path: '/create',
+            Component: Catalogue,
+          },
         ],
       },
     ],
