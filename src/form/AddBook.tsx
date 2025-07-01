@@ -16,22 +16,20 @@ import {
 import { useNavigate } from 'react-router';
 import CloseIcon from '@mui/icons-material/Close';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { InferType } from 'yup';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { IMaskInput } from 'react-imask';
-import { ISBN_TYPES } from '../data/types.ts';
-import isISBN from 'validator/es/lib/isISBN';
+import { BookFormFields, ISBN_TYPES } from '../data/types.ts';
 import type { MaskedPattern } from 'imask';
 import { HEIGHT_NAVBAR } from '../utils/constants.ts';
 import ConfirmDialog from '../components/ConfirmationDialog.tsx';
+import { bookValidationSchema } from './validationSchemas.ts';
 
 type ISBNMask = {
   mask: string;
   blocks?: MaskedPattern['blocks']; //excludes null and undefined from MaskedPattern
 };
-export const isbn10Mask: ISBNMask = {
+const isbn10Mask: ISBNMask = {
   mask: '0-0000-0000-`',
   blocks: {
     '`': {
@@ -40,36 +38,9 @@ export const isbn10Mask: ISBNMask = {
   },
 };
 
-export const isbn13Mask: ISBNMask = {
+const isbn13Mask: ISBNMask = {
   mask: '000-0-000-00000-0',
 };
-
-const validationSchema = yup.object({
-  title: yup.string().required('Every book needs a title'),
-  author: yup
-    .string()
-    .min(2, 'A name should at least have more than 2 letters')
-    .matches(
-      /^\D*$/,
-      'Only Elon Musk would burden his child with digits in their name, dont be that person too.',
-    )
-    .required('Was the book written by a ghost?'),
-  publishedDate: yup.date().required('Published date is required').typeError('Invalid date'),
-  isbnType: yup.string().oneOf(Object.values(ISBN_TYPES)).required('Please select ISBN type'),
-  isbn: yup
-    .string()
-    .required('Librarians would be mad without this, please dont make one cry')
-    .test('is-valid-isbn', 'Invalid ISBN for selected type', function (value) {
-      const { isbnType } = this.parent;
-      if (!value || !isbnType) {
-        return false;
-      }
-      const version = isbnType === ISBN_TYPES.ISBN_10 ? '10' : '13';
-      return isISBN(value, version);
-    }),
-});
-
-type FormFields = InferType<typeof validationSchema>;
 
 interface ISBNMaskProps extends InputBaseComponentProps {
   maskOptions: ISBNMask;
@@ -113,7 +84,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
     setFieldValue,
     isValid,
     resetForm,
-  } = useFormik<FormFields>({
+  } = useFormik<BookFormFields>({
     initialValues: {
       title: '',
       author: '',
@@ -121,7 +92,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
       isbnType: ISBN_TYPES.ISBN_13,
       isbn: '',
     },
-    validationSchema: validationSchema,
+    validationSchema: bookValidationSchema,
     onSubmit: (values) => {
       console.log({ values });
     },

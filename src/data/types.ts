@@ -1,5 +1,6 @@
 import { InferType } from 'yup';
 import { industryIdentifierSchema } from './bookSchema.ts';
+import { bookValidationSchema } from '../form/validationSchemas.ts';
 
 export type Order = 'asc' | 'desc';
 
@@ -49,3 +50,5 @@ export type RetailPrice = {
   amount: number;
   currencyCode: string;
 };
+
+export type BookFormFields = InferType<typeof bookValidationSchema>;

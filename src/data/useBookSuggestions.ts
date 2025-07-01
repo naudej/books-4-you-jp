@@ -1,9 +1,8 @@
 import { useState, useMemo } from 'react';
 import debounce from 'lodash/debounce';
-import { SearchOption } from './types.ts';
-import { API_BASE_URL } from '../utils/constants.ts';
-import { bookApiSchema } from './bookSchema.ts';
-import { useSnackbar } from '../context/SnackBarContext.tsx';
+import { SearchOption } from './types';
+import { useSnackbar } from '../context/SnackBarContext';
+import { fetchBookSuggestions } from './api.ts';
 
 const useBookSuggestions = () => {
   const [searchOptions, setSearchOptions] = useState<SearchOption[]>([]);
@@ -16,26 +15,20 @@ const useBookSuggestions = () => {
         if (query.trim().length < 3) {
           return;
         }
-        setLoading(true);
 
+        setLoading(true);
         try {
-          const response = await fetch(`${API_BASE_URL}?q=${encodeURIComponent(query)}`);
-          const data = await response.json();
-          const { items } = await bookApiSchema.validate(data);
-          const foundSearchOptions: SearchOption[] = items.map((item: any) => ({
-            id: item.id,
-            title: item.volumeInfo?.title ?? '',
-          }));
-          setSearchOptions(foundSearchOptions);
-        } catch (err) {
+          const suggestions = await fetchBookSuggestions(query);
+          setSearchOptions(suggestions);
+        } catch {
           showSnackbar({
-            message: 'Failed to get suggestions for your books, Im sorry :(',
+            message: "Failed to get suggestions for your books, I'm sorry :(",
             type: 'error',
           });
         } finally {
           setLoading(false);
         }
-      }, 400),
+      }, 500),
     [],
   );
 
