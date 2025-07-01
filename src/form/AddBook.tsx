@@ -25,6 +25,7 @@ import { ISBN_TYPES } from '../data/types.ts';
 import isISBN from 'validator/es/lib/isISBN';
 import type { MaskedPattern } from 'imask';
 import { HEIGHT_NAVBAR } from '../utils/constants.ts';
+import ConfirmDialog from '../components/ConfirmationDialog.tsx';
 
 type ISBNMask = {
   mask: string;
@@ -127,139 +128,167 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
   });
 
   const isbnMask = values.isbnType === ISBN_TYPES.ISBN_10 ? isbn10Mask : isbn13Mask;
+  const [openCancelConfirm, setCancelConfirm] = React.useState(false);
 
-  const handleClose = (
-    _event: React.KeyboardEvent | React.MouseEvent,
-    reason: 'backdropClick' | 'escapeKeyDown',
-  ) => {
-    navigate(-1);
-    if (reason === 'backdropClick') {
+  const handleClose = () => {
+    const { author, title, isbn } = values;
+    if (!author && !title && !isbn) {
+      handleConfirmClose();
       return;
     }
+    setCancelConfirm(true);
+  };
+
+  const handleConfirmClose = () => {
+    resetForm();
+    setCancelConfirm(false);
     navigate(-1);
   };
 
+  const handleCancelClose = () => {
+    setCancelConfirm(false);
+  };
+
   return (
-    <Drawer
-      anchor="right"
-      open={open}
-      onClose={handleClose}
-      slotProps={{
-        paper: {
-          sx: {
-            height: `calc(100% - ${HEIGHT_NAVBAR})`,
-            top: HEIGHT_NAVBAR,
+    <>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={handleClose}
+        slotProps={{
+          paper: {
+            sx: {
+              height: `calc(100% - ${HEIGHT_NAVBAR})`,
+              top: HEIGHT_NAVBAR,
+            },
           },
-        },
-      }}
-    >
-      <form onSubmit={handleSubmit} style={{ height: '100%' }}>
-        <Stack
-          direction="column"
-          spacing={2}
-          sx={{
-            width: 500,
-            padding: '15px 40px',
-            justifyContent: 'space-between',
-            height: '100%',
-          }}
-        >
-          <Stack direction="column" spacing={3}>
-            <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-              <Typography variant="h5">Create your book</Typography>
-              <IconButton aria-label="back" onClick={() => navigate(-1)}>
-                <CloseIcon />
-              </IconButton>
-            </Stack>
-            <TextField
-              autoFocus={true}
-              required={true}
-              fullWidth={true}
-              id="title"
-              name="title"
-              label="Title"
-              aria-label="title"
-              value={values.title}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.title && Boolean(errors.title)}
-              helperText={touched.title && errors.title}
-            />
-            <TextField
-              fullWidth={true}
-              required={true}
-              id="author"
-              name="author"
-              label="Author"
-              aria-label="author"
-              value={values.author}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.author && Boolean(errors.author)}
-              helperText={touched.author && errors.author}
-            />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                label="Published Date"
-                value={values.publishedDate}
-                onChange={(date) => {
-                  setFieldValue('publishedDate', date);
-                }}
-                slotProps={{
-                  textField: {
-                    fullWidth: true,
-                    onBlur: handleBlur,
-                    required: true,
-                    error: touched.publishedDate && Boolean(errors.publishedDate),
-                    helperText:
-                      touched.publishedDate && typeof errors.publishedDate === 'string'
-                        ? errors.publishedDate
-                        : '',
+        }}
+      >
+        <form onSubmit={handleSubmit} style={{ height: '100%' }}>
+          <Stack
+            direction="column"
+            spacing={2}
+            sx={{
+              width: 500,
+              padding: '15px 40px',
+              justifyContent: 'space-between',
+              height: '100%',
+            }}
+          >
+            <Stack direction="column" spacing={3}>
+              <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+                <Typography variant="h5">Create your book</Typography>
+                <IconButton aria-label="back" onClick={handleClose}>
+                  <CloseIcon />
+                </IconButton>
+              </Stack>
+              <TextField
+                autoFocus={true}
+                required={true}
+                fullWidth={true}
+                id="title"
+                name="title"
+                label="Title"
+                aria-label="title"
+                value={values.title}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.title && Boolean(errors.title)}
+                helperText={touched.title && errors.title}
+              />
+              <TextField
+                fullWidth={true}
+                required={true}
+                id="author"
+                name="author"
+                label="Author"
+                aria-label="author"
+                value={values.author}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.author && Boolean(errors.author)}
+                helperText={touched.author && errors.author}
+              />
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Published Date"
+                  value={values.publishedDate}
+                  onChange={(date) => {
+                    setFieldValue('publishedDate', date);
+                  }}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      onBlur: handleBlur,
+                      required: true,
+                      error: touched.publishedDate && Boolean(errors.publishedDate),
+                      helperText:
+                        touched.publishedDate && typeof errors.publishedDate === 'string'
+                          ? errors.publishedDate
+                          : '',
+                    },
+                  }}
+                />
+              </LocalizationProvider>
+              <FormControl required={true} component="fieldset">
+                <FormLabel component="legend">ISBN Type</FormLabel>
+                <RadioGroup
+                  row={true}
+                  name="isbnType"
+                  value={values.isbnType}
+                  onChange={handleChange}
+                >
+                  <FormControlLabel
+                    value={ISBN_TYPES.ISBN_10}
+                    control={<Radio />}
+                    label="ISBN-10"
+                  />
+                  <FormControlLabel
+                    value={ISBN_TYPES.ISBN_13}
+                    control={<Radio />}
+                    label="ISBN-13"
+                  />
+                </RadioGroup>
+              </FormControl>
+              <TextField
+                name="isbn"
+                label="ISBN"
+                required={true}
+                value={values.isbn}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.isbn && Boolean(errors.isbn)}
+                helperText={touched.isbn && errors.isbn}
+                InputProps={{
+                  inputComponent: ISBNMaskInput,
+                  inputProps: {
+                    maskOptions: isbnMask,
                   },
                 }}
               />
-            </LocalizationProvider>
-            <FormControl required={true} component="fieldset">
-              <FormLabel component="legend">ISBN Type</FormLabel>
-              <RadioGroup
-                row={true}
-                name="isbnType"
-                value={values.isbnType}
-                onChange={handleChange}
-              >
-                <FormControlLabel value={ISBN_TYPES.ISBN_10} control={<Radio />} label="ISBN-10" />
-                <FormControlLabel value={ISBN_TYPES.ISBN_13} control={<Radio />} label="ISBN-13" />
-              </RadioGroup>
-            </FormControl>
-            <TextField
-              name="isbn"
-              label="ISBN"
-              required={true}
-              value={values.isbn}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.isbn && Boolean(errors.isbn)}
-              helperText={touched.isbn && errors.isbn}
-              InputProps={{
-                inputComponent: ISBNMaskInput,
-                inputProps: {
-                  maskOptions: isbnMask,
-                },
-              }}
-            />
+            </Stack>
+            <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end' }}>
+              <Button onClick={handleClose}>Close</Button>
+              <Button onClick={() => resetForm()} color="warning">
+                Reset
+              </Button>
+              <Button color="primary" disabled={!isValid} variant="contained" type="submit">
+                Submit
+              </Button>
+            </Stack>
           </Stack>
-          <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end' }}>
-            <Button onClick={() => navigate(-1)}>Close</Button>
-            <Button onClick={() => resetForm()} color="warning">
-              Reset
-            </Button>
-            <Button color="primary" disabled={!isValid} variant="contained" type="submit">
-              Submit
-            </Button>
-          </Stack>
-        </Stack>
-      </form>
-    </Drawer>
+        </form>
+      </Drawer>
+      <ConfirmDialog
+        title={'No dont go!'}
+        description={
+          'You just got started creating your very own book, are you sure you want to leave now?'
+        }
+        open={openCancelConfirm}
+        onClose={handleCancelClose}
+        onConfirm={handleConfirmClose}
+      />
+    </>
   );
 };
 export default AddBook;
