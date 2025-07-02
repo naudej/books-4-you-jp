@@ -3,7 +3,7 @@ import BooksTable from '../components/BooksTable.tsx';
 import { Book, HeadCell, Order, SearchOption } from '../data/types.ts';
 import { Button, Grid, Stack } from '@mui/material';
 import SearchInput from '../components/SearchInput.tsx';
-import useBooks from '../data/useBooks.tsx';
+import useBooks from '../data/useBooks.ts';
 import { useMatch, useNavigate, useSearchParams } from 'react-router';
 import { useCallback, useEffect, useState } from 'react';
 import useBookSuggestions from '../data/useBookSuggestions.ts';

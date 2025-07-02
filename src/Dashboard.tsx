@@ -5,8 +5,7 @@ import { PageContainer } from '@toolpad/core/PageContainer';
 import Paper from '@mui/material/Paper';
 import { SnackbarProvider } from './context/SnackBarContext.tsx';
 
-//@TODO Update this function signature
-export default function Dashboard() {
+const Dashboard: React.FC = () => {
   return (
     <DashboardLayout hideNavigation={true}>
       <SnackbarProvider>
@@ -21,4 +20,5 @@ export default function Dashboard() {
       </SnackbarProvider>
     </DashboardLayout>
   );
-}
+};
+export default Dashboard;
