@@ -1,7 +1,7 @@
 import { API_BASE_URL } from '../utils/constants';
 import { formatPublishedDate, getIsbnNumber } from '../utils/utils';
 import { bookApiSchema, detailedBookSchema } from './bookSchema.ts';
-import { Book, DetailedBook, SearchOption } from './types.ts';
+import { Book, BookFormFields, DetailedBook, SearchOption } from './types.ts';
 
 export const fetchBookById = async (id: string, signal?: AbortSignal): Promise<DetailedBook> => {
   const response = await fetch(`${API_BASE_URL}/${id}`, { signal });
@@ -85,4 +85,17 @@ export const fetchBookSuggestions = async (searchTerm: string): Promise<SearchOp
     id: item.id,
     title: item.volumeInfo.title,
   }));
+};
+
+export const submitBook = async (book: BookFormFields): Promise<void> => {
+  const response = await fetch(`${API_BASE_URL}/submit`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(book),
+  });
+  if (!response.ok) {
+    throw new Error(`Unfortunately this will always error because its not a real API`);
+  }
 };

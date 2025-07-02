@@ -24,6 +24,7 @@ import type { MaskedPattern } from 'imask';
 import { HEIGHT_NAVBAR } from '../utils/constants.ts';
 import ConfirmDialog from '../components/ConfirmationDialog.tsx';
 import { bookValidationSchema } from './validationSchemas.ts';
+import { useBookSubmit } from '../data/useBookSubmit.ts';
 
 type ISBNMask = {
   mask: string;
@@ -74,6 +75,7 @@ interface AddBookProps {
 //@TODO improvement move Textfields to another component that avoids all the bloat added to the Textfield e.g. <Input name="author" value={values.title} /> somehow uses the values.title to call the correct helpers, maybe can use FormikContext or useFormik here
 const AddBook: React.FC<AddBookProps> = ({ open }) => {
   const navigate = useNavigate();
+  const { submit } = useBookSubmit();
   const {
     handleSubmit,
     values,
@@ -94,7 +96,8 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
     },
     validationSchema: bookValidationSchema,
     onSubmit: (values) => {
-      console.log({ values });
+      submit(values);
+      resetForm();
     },
   });
 
