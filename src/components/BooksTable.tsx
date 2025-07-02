@@ -49,7 +49,7 @@ const BooksTable: React.FC<BooksTableProps> = ({
   const [orderBy, setOrderBy] = React.useState<keyof Book>(initialSortBy || 'title');
   const navigate = useNavigate();
 
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Book) => {
+  const handleRequestSort = (property: keyof Book) => {
     const isAsc = orderBy === property && order === 'asc';
     const updatedOrder = isAsc ? 'desc' : 'asc';
     setOrder(updatedOrder);
