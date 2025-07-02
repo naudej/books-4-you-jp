@@ -3,6 +3,7 @@ import { Avatar, Box, TableCell, TableRow, Typography } from '@mui/material';
 import BookPreviewImage from './BookPreviewImage';
 import { deepOrange } from '@mui/material/colors';
 import { Book } from '../data/types.ts';
+import { format } from 'date-fns';
 
 interface BookRowProps {
   book: Book;
@@ -49,7 +50,7 @@ const BookRow: React.FC<BookRowProps> = ({ book, onClick }) => {
           </Box>
         ))}
       </TableCell>
-      <TableCell>{publishedDate}</TableCell>
+      <TableCell> {publishedDate ? format(publishedDate, 'dd/MM/yyyy') : 'Unknown'}</TableCell>
       <TableCell>
         {categories.map((category) => (
           <Typography

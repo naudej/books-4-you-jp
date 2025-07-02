@@ -25,7 +25,7 @@ export type Book = {
   subtitle?: string;
   authors: string[];
   categories: string[];
-  publishedDate: string;
+  publishedDate: Date | null;
   isbn: string;
   thumbnail?: string;
 };

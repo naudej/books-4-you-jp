@@ -1,5 +1,5 @@
 import { API_BASE_URL } from '../utils/constants';
-import { formatPublishedDate, getIsbnNumber } from '../utils/utils';
+import { getIsbnNumber, parseDate } from '../utils/utils';
 import { bookApiSchema, detailedBookSchema } from './bookSchema.ts';
 import { Book, BookFormFields, DetailedBook, SearchOption } from './types.ts';
 
@@ -38,7 +38,7 @@ export const fetchBookById = async (id: string, signal?: AbortSignal): Promise<D
     language: language || '',
     authors,
     categories,
-    publishedDate: formatPublishedDate(publishedDate),
+    publishedDate: parseDate(publishedDate),
     publisher,
     previewLink,
     industryIdentifiers,
@@ -70,7 +70,7 @@ export const searchBooks = async (searchTerm: string, signal?: AbortSignal): Pro
       title,
       authors,
       categories,
-      publishedDate: formatPublishedDate(publishedDate),
+      publishedDate: parseDate(publishedDate),
       thumbnail: imageLinks?.thumbnail || '',
     };
   });

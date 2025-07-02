@@ -69,7 +69,7 @@ const Catalogue: React.FC = () => {
 
   const handleOptionSelect = useCallback(
     (option: SearchOption) => {
-      setInputValue(option.title); // immediately reflect selected option
+      setInputValue(option.title);
       setSearchParams({ q: option.title });
     },
     [setSearchParams],
@@ -100,7 +100,12 @@ const Catalogue: React.FC = () => {
           Add Book
         </Button>
       </Grid>
-      <BooksTable books={books} tableHeaders={CatalogueHeaders} loading={loading} />
+      <BooksTable
+        key={searchTerm}
+        books={books}
+        tableHeaders={CatalogueHeaders}
+        loading={loading}
+      />
       <AddBook open={Boolean(openCreate)} />
     </Stack>
   );

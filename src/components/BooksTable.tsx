@@ -53,7 +53,6 @@ const BooksTable: React.FC<BooksTableProps> = ({ books, tableHeaders, loading = 
     () => [...books].sort(getComparator(order, orderBy)),
     [books, order, orderBy],
   );
-  //@TODO Note Categosries search is not working
 
   return (
     <Box sx={{ width: '100%' }}>
