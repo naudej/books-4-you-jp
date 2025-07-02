@@ -32,17 +32,29 @@ interface BooksTableProps {
   books: Book[];
   tableHeaders: HeadCell[];
   loading?: boolean;
+  initialSortBy?: keyof Book;
+  initialOrder?: Order;
+  onSortChange: (orderBy: keyof Book, order: Order) => void;
 }
 
-const BooksTable: React.FC<BooksTableProps> = ({ books, tableHeaders, loading = false }) => {
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Book>('title');
+const BooksTable: React.FC<BooksTableProps> = ({
+  books,
+  tableHeaders,
+  loading = false,
+  initialSortBy,
+  initialOrder,
+  onSortChange,
+}) => {
+  const [order, setOrder] = React.useState<Order>(initialOrder || 'asc');
+  const [orderBy, setOrderBy] = React.useState<keyof Book>(initialSortBy || 'title');
   const navigate = useNavigate();
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Book) => {
     const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const updatedOrder = isAsc ? 'desc' : 'asc';
+    setOrder(updatedOrder);
     setOrderBy(property);
+    onSortChange(property, updatedOrder);
   };
 
   const onRowClick = (id: string) => {

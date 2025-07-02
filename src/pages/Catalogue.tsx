@@ -1,6 +1,6 @@
 import * as React from 'react';
 import BooksTable from '../components/BooksTable.tsx';
-import { HeadCell, SearchOption } from '../data/types.ts';
+import { Book, HeadCell, Order, SearchOption } from '../data/types.ts';
 import { Button, Grid, Stack } from '@mui/material';
 import SearchInput from '../components/SearchInput.tsx';
 import useBooks from '../data/useBooks.tsx';
@@ -40,6 +40,8 @@ const CatalogueHeaders: HeadCell[] = [
 const Catalogue: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get('q') || 'harry';
+  const sortByParam = (searchParams.get('sortBy') as keyof Book) || 'title';
+  const orderParam = (searchParams.get('order') as Order) || 'asc';
   const { books, loading, error } = useBooks(searchTerm);
   const [inputValue, setInputValue] = useState(searchTerm);
   const initialValues: SearchOption[] = books.map(({ id, title }) => ({ id, title }));
@@ -62,17 +64,17 @@ const Catalogue: React.FC = () => {
   const handleSearchSubmit = useCallback(
     (value: string) => {
       setInputValue('');
-      setSearchParams({ q: value });
+      setSearchParams({ q: value, sortBy: sortByParam, order: orderParam });
     },
-    [setSearchParams],
+    [setSearchParams, sortByParam, orderParam],
   );
 
   const handleOptionSelect = useCallback(
     (option: SearchOption) => {
       setInputValue(option.title);
-      setSearchParams({ q: option.title });
+      setSearchParams({ q: option.title, sortBy: sortByParam, order: orderParam });
     },
-    [setSearchParams],
+    [setSearchParams, sortByParam, orderParam],
   );
 
   return (
@@ -101,7 +103,11 @@ const Catalogue: React.FC = () => {
         </Button>
       </Grid>
       <BooksTable
-        key={searchTerm}
+        initialSortBy={sortByParam}
+        initialOrder={orderParam}
+        onSortChange={(updatedSortBy, updatedOrderBy) =>
+          setSearchParams({ q: searchTerm, sortBy: updatedSortBy, order: updatedOrderBy })
+        }
         books={books}
         tableHeaders={CatalogueHeaders}
         loading={loading}
