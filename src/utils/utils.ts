@@ -1,6 +1,5 @@
 import { IndustryIdentifier, ISBN_TYPES } from '../data/types.ts';
-import { isValid, parse } from 'date-fns';
-import { format as dateFormat } from 'date-fns/format';
+import { isValid, parseISO } from 'date-fns';
 
 export const getIsbnNumber = (industryIdentifiers: IndustryIdentifier[]) => {
   const isbn13 = industryIdentifiers.find((isbn) => isbn.type === ISBN_TYPES.ISBN_13);
@@ -21,13 +20,12 @@ export const getIsbnNumber = (industryIdentifiers: IndustryIdentifier[]) => {
   return null;
 };
 
-export const formatPublishedDate = (input: string): string => {
-  const formats = ['yyyy-MM-dd', 'yyyy-MM', 'yyyy'];
-  for (const format of formats) {
-    const parsed = parse(input, format, new Date());
-    if (isValid(parsed)) return dateFormat(parsed, 'dd/MM/yyyy');
+export const parseDate = (dateString?: string): Date | null => {
+  if (!dateString) {
+    return null;
   }
-  return 'Unknown';
+  const date = parseISO(dateString);
+  return isValid(date) ? date : null;
 };
 
 export const formatCurrency = (amount: number, currency: string, locale = 'en-US') => {
