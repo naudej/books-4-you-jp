@@ -8,15 +8,15 @@ import { visuallyHidden } from '@mui/utils';
 import { Book, HeadCell, Order } from '../data/types.ts';
 
 interface TableHeaderProps {
-  onRequestSort: (_event: React.MouseEvent<unknown>, _property: keyof Book) => void;
+  onRequestSort: (property: keyof Book) => void;
   order: Order;
   orderBy: string;
   headers: HeadCell[];
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({ order, orderBy, onRequestSort, headers }) => {
-  const createSortHandler = (property: keyof Book) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property);
+  const createSortHandler = (property: keyof Book) => {
+    onRequestSort(property);
   };
 
   return (
@@ -28,7 +28,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({ order, orderBy, onRequestSort
             <TableSortLabel
               active={orderBy === header.id}
               direction={orderBy === header.id ? order : 'asc'}
-              onClick={createSortHandler(header.id)}
+              onClick={() => createSortHandler(header.id)}
             >
               {header.label}
               {orderBy === header.id ? (
