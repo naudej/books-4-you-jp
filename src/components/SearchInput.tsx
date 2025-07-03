@@ -15,7 +15,6 @@ interface SearchInputProps {
   inputValue: string;
 }
 
-//@TODO fix
 const SearchInput = ({
   options = [],
   onInputChange,
@@ -57,14 +56,14 @@ const SearchInput = ({
         <TextField
           {...params}
           label={label}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyPress}
           placeholder={placeholder}
           InputProps={{
             ...params.InputProps,
             endAdornment: (
               <>
                 {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                <IconButton aria-label="delete" onClick={handleIconClick}>
+                <IconButton aria-label="search" onClick={handleIconClick}>
                   <SearchIcon />
                 </IconButton>
                 {params.InputProps.endAdornment}
