@@ -79,7 +79,6 @@ const BookDetails = () => {
                 </Typography>
               ))}
             </Stack>
-            {/*//@TODO need to assign icons and colors to different known categories*/}
           </Stack>
         </Stack>
         <Stack>{retailPrice && buyLink && <BuyButton link={buyLink} price={retailPrice} />}</Stack>
