@@ -128,6 +128,8 @@ const AddBook = ({ open }: AddBookProps) => {
       <Drawer
         anchor="right"
         open={open}
+        role="dialog"
+        aria-labelledby="create-book-drawer"
         onClose={handleClose}
         slotProps={{
           paper: {
@@ -186,6 +188,7 @@ const AddBook = ({ open }: AddBookProps) => {
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label="Published Date"
+                  aria-label="published-date"
                   value={values.publishedDate}
                   onChange={(date) => {
                     setFieldValue('publishedDate', date);
@@ -205,19 +208,24 @@ const AddBook = ({ open }: AddBookProps) => {
                 />
               </LocalizationProvider>
               <FormControl required={true} component="fieldset">
-                <FormLabel component="legend">ISBN Type</FormLabel>
+                <FormLabel id="isbn-type-label" component="legend" aria-label="isbn-type">
+                  ISBN Type
+                </FormLabel>
                 <RadioGroup
                   row={true}
                   name="isbnType"
+                  aria-labelledby="isbn-type-label"
                   value={values.isbnType}
                   onChange={handleChange}
                 >
                   <FormControlLabel
+                    aria-label="isbn-10"
                     value={ISBN_TYPES.ISBN_10}
                     control={<Radio />}
                     label="ISBN-10"
                   />
                   <FormControlLabel
+                    aria-label="isbn-13"
                     value={ISBN_TYPES.ISBN_13}
                     control={<Radio />}
                     label="ISBN-13"
@@ -227,6 +235,7 @@ const AddBook = ({ open }: AddBookProps) => {
               <TextField
                 name="isbn"
                 label="ISBN"
+                aria-label="isbn-input"
                 required={true}
                 value={values.isbn}
                 onChange={handleChange}
@@ -242,11 +251,19 @@ const AddBook = ({ open }: AddBookProps) => {
               />
             </Stack>
             <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end' }}>
-              <Button onClick={handleClose}>Close</Button>
-              <Button onClick={() => resetForm()} color="warning">
+              <Button onClick={handleClose} aria-label="close-btn">
+                Close
+              </Button>
+              <Button onClick={() => resetForm()} color="warning" aria-label="reset-btn">
                 Reset
               </Button>
-              <Button color="primary" disabled={!isValid} variant="contained" type="submit">
+              <Button
+                color="primary"
+                aria-label="submit-btn"
+                disabled={!isValid}
+                variant="contained"
+                type="submit"
+              >
                 Submit
               </Button>
             </Stack>
@@ -254,6 +271,7 @@ const AddBook = ({ open }: AddBookProps) => {
         </form>
       </Drawer>
       <ConfirmDialog
+        aria-label="cancel-dialog"
         title={'No dont go!'}
         description={
           'You just got started creating your very own book, are you sure you want to leave now?'
