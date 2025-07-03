@@ -23,12 +23,21 @@ const TableHeader: React.FC<TableHeaderProps> = ({ order, orderBy, onRequestSort
     <TableHead>
       <TableRow>
         {headers.map((header) => (
-          // @TODO The whole TableCell should be clickable according to the specs
-          <TableCell key={header.id} sortDirection={orderBy === header.id ? order : false}>
+          <TableCell
+            role="button"
+            onClick={() => createSortHandler(header.id)}
+            sx={{
+              cursor: 'pointer',
+              '&:hover': {
+                backgroundColor: 'action.hover',
+              },
+            }}
+            key={header.id}
+            sortDirection={orderBy === header.id ? order : false}
+          >
             <TableSortLabel
               active={orderBy === header.id}
               direction={orderBy === header.id ? order : 'asc'}
-              onClick={() => createSortHandler(header.id)}
             >
               {header.label}
               {orderBy === header.id ? (
