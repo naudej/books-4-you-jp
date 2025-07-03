@@ -8,7 +8,6 @@ import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { Button, Grid, Stack } from '@mui/material';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import Typography from '@mui/material/Typography';
-import type { ErrorInfo } from 'react';
 
 const ErrorFallback: React.FC<FallbackProps> = ({ resetErrorBoundary }) => {
   const navigate = useNavigate();
@@ -39,7 +38,7 @@ const ErrorFallback: React.FC<FallbackProps> = ({ resetErrorBoundary }) => {
   );
 };
 
-const logError = (error: Error, info: ErrorInfo) => {
+const logError = (error: Error, info: React.ErrorInfo) => {
   console.error('I would usually log this to Sentry but for now, Uncaught error:', error);
   console.error('Component Stack:', info.componentStack);
 };
@@ -54,6 +53,7 @@ const Dashboard: React.FC = () => {
             sx={{ width: '100%', height: '100%', padding: '25px', borderRadius: '10px' }}
           >
             <ErrorBoundary FallbackComponent={ErrorFallback} onError={logError}>
+              {/*Thought about adding a Suspense here but none of my routes are lazy loaded so its not really needed*/}
               <Outlet />
             </ErrorBoundary>
           </Paper>
