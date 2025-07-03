@@ -94,7 +94,6 @@ const BookDetails = () => {
           <Chip label={category} variant="outlined" key={category} />
         ))}
       </Stack>
-      {/*//@TODO for long descriptions + mobile view add a show more*/}
       {description && (
         <Typography
           variant="body1"

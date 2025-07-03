@@ -26,9 +26,6 @@ const BRANDING = {
   logo: <AutoStoriesIcon color="primary" fontSize="large" />,
 };
 
-//@TODO Add a pre-push for simple-git-hooks that run the NPM tests
-//@TODO NEXT STEP: LOCALIZATION
-//@TODO: Super nice to have a detector if the user is disconnected from the internet
 const App: React.FC = () => {
   return (
     <ReactRouterAppProvider theme={theme} branding={BRANDING}>

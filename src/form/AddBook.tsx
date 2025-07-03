@@ -72,7 +72,7 @@ const ISBNMaskInput = forwardRef<HTMLInputElement, ISBNMaskProps>(function ISBNM
 interface AddBookProps {
   open: boolean;
 }
-//@TODO improvement move Textfields to another component that avoids all the bloat added to the Textfield e.g. <Input name="author" value={values.title} /> somehow uses the values.title to call the correct helpers, maybe can use FormikContext or useFormik here
+
 const AddBook = ({ open }: AddBookProps) => {
   const navigate = useNavigate();
   const { submit } = useBookSubmit();
