@@ -1,10 +1,10 @@
-import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import Catalogue from './pages/Catalogue.tsx';
 import BookDetails from './pages/BookDetails.tsx';
 import Dashboard from './Dashboard.tsx';
+import React from 'react';
 const router = createBrowserRouter([
   {
     Component: App,

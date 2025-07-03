@@ -15,7 +15,8 @@ interface SearchInputProps {
   inputValue: string;
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({
+//@TODO fix
+const SearchInput = ({
   options = [],
   onInputChange,
   onSearchSubmit,
@@ -25,7 +26,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   error,
   inputValue,
   onOptionSelect,
-}) => {
+}: SearchInputProps) => {
   const handleKeyPress = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && inputValue.trim().length >= 3) {
       onSearchSubmit(inputValue);

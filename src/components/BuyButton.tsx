@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -10,11 +9,7 @@ interface BuyButtonProps {
   price: RetailPrice;
   ariaLabel?: string;
 }
-const BuyButton: React.FC<BuyButtonProps> = ({
-  link,
-  price,
-  ariaLabel = 'Add to shopping cart',
-}) => {
+const BuyButton = ({ link, price, ariaLabel = 'Add to shopping cart' }: BuyButtonProps) => {
   const { amount, currencyCode } = price;
   return (
     <Button

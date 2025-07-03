@@ -1,4 +1,3 @@
-import * as React from 'react';
 import BooksTable from '../components/BooksTable.tsx';
 import { Book, HeadCell, Order, SearchOption } from '../data/types.ts';
 import { Button, Grid, Stack } from '@mui/material';
@@ -37,7 +36,7 @@ const CatalogueHeaders: HeadCell[] = [
   },
 ];
 
-const Catalogue: React.FC = () => {
+const Catalogue = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get('q') || 'harry';
   const sortByParam = (searchParams.get('sortBy') as keyof Book) || 'title';

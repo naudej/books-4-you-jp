@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 import Snackbar, { SnackbarProps as MuiSnackBarProps } from '@mui/material/Snackbar';
 import Alert, { AlertProps as MuiAlertProps, AlertColor } from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -35,8 +35,10 @@ export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
     setOpen(true);
   };
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') return;
+  const handleClose = (reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
     setOpen(false);
   };
 
@@ -58,13 +60,13 @@ export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
       {children}
       <Snackbar
         open={open}
-        onClose={handleClose}
+        onClose={(_, reason) => handleClose(reason)}
         autoHideDuration={autoHideDuration}
         anchorOrigin={anchorOrigin}
         slots={{ transition: Slide }}
       >
         <Alert
-          onClose={handleClose}
+          onClose={() => handleClose()}
           severity={type}
           variant={variant}
           icon={icon}

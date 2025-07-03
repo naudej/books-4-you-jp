@@ -1,4 +1,3 @@
-import * as React from 'react';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -14,7 +13,7 @@ interface TableHeaderProps {
   headers: HeadCell[];
 }
 
-const TableHeader: React.FC<TableHeaderProps> = ({ order, orderBy, onRequestSort, headers }) => {
+const TableHeader = ({ order, orderBy, onRequestSort, headers }: TableHeaderProps) => {
   const createSortHandler = (property: keyof Book) => {
     onRequestSort(property);
   };

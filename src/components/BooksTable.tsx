@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,6 +8,7 @@ import { Book, HeadCell, Order } from '../data/types.ts';
 import { useNavigate } from 'react-router';
 import BookRow from './BookRow.tsx';
 import EmptyRow from './EmptyRow.tsx';
+import { useMemo, useState } from 'react';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T): number {
   const aValue = a[orderBy] ?? '';
@@ -37,16 +37,16 @@ interface BooksTableProps {
   onSortChange: (orderBy: keyof Book, order: Order) => void;
 }
 
-const BooksTable: React.FC<BooksTableProps> = ({
+const BooksTable = ({
   books,
   tableHeaders,
   loading = false,
   initialSortBy,
   initialOrder,
   onSortChange,
-}) => {
-  const [order, setOrder] = React.useState<Order>(initialOrder || 'asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Book>(initialSortBy || 'title');
+}: BooksTableProps) => {
+  const [order, setOrder] = useState<Order>(initialOrder || 'asc');
+  const [orderBy, setOrderBy] = useState<keyof Book>(initialSortBy || 'title');
   const navigate = useNavigate();
 
   const handleRequestSort = (property: keyof Book) => {
@@ -61,7 +61,7 @@ const BooksTable: React.FC<BooksTableProps> = ({
     navigate(`/book/${id}`);
   };
 
-  const sortedBooks = React.useMemo(
+  const sortedBooks = useMemo(
     () => [...books].sort(getComparator(order, orderBy)),
     [books, order, orderBy],
   );

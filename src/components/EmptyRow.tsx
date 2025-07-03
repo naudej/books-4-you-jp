@@ -1,10 +1,9 @@
 import { CircularProgress, TableCell, TableRow, Typography } from '@mui/material';
-import * as React from 'react';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import Stack from '@mui/material/Stack';
 import { MEDIUM_ICON } from '../utils/constants.ts';
 
-const EmptyMessage: React.FC = () => (
+const EmptyMessage = () => (
   <>
     <Stack
       spacing={1}
@@ -24,7 +23,7 @@ interface EmptyRowProps {
   colSpan: number;
   loading?: boolean;
 }
-const EmptyRow: React.FC<EmptyRowProps> = ({ colSpan, loading = false }) => (
+const EmptyRow = ({ colSpan, loading = false }: EmptyRowProps) => (
   <TableRow sx={{ height: 200 }}>
     <TableCell colSpan={colSpan} align="center">
       {loading ? <CircularProgress size={60} /> : <EmptyMessage />}

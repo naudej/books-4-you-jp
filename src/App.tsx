@@ -27,7 +27,6 @@ const BRANDING = {
 };
 
 //@TODO Add a pre-push for simple-git-hooks that run the NPM tests
-//@TODO Add suspense fallback with 404 page cannot be found or something went wrong
 //@TODO NEXT STEP: LOCALIZATION
 //@TODO: Super nice to have a detector if the user is disconnected from the internet
 const App: React.FC = () => {

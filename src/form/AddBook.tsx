@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 import {
   Drawer,
   Button,
@@ -73,7 +73,7 @@ interface AddBookProps {
   open: boolean;
 }
 //@TODO improvement move Textfields to another component that avoids all the bloat added to the Textfield e.g. <Input name="author" value={values.title} /> somehow uses the values.title to call the correct helpers, maybe can use FormikContext or useFormik here
-const AddBook: React.FC<AddBookProps> = ({ open }) => {
+const AddBook = ({ open }: AddBookProps) => {
   const navigate = useNavigate();
   const { submit } = useBookSubmit();
   const {
@@ -102,7 +102,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
   });
 
   const isbnMask = values.isbnType === ISBN_TYPES.ISBN_10 ? isbn10Mask : isbn13Mask;
-  const [openCancelConfirm, setCancelConfirm] = React.useState(false);
+  const [openCancelConfirm, setCancelConfirm] = useState(false);
 
   const handleClose = () => {
     const { author, title, isbn } = values;

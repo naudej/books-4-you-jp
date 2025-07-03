@@ -1,8 +1,7 @@
-import * as React from 'react';
 import { Box } from '@mui/material';
-import { useState } from 'react';
 import BookIcon from '@mui/icons-material/Book';
 import { THUMBNAIL_SIZES } from '../utils/constants.ts';
+import { useState } from 'react';
 
 interface BookPreviewImageProps {
   id?: string;
@@ -11,7 +10,7 @@ interface BookPreviewImageProps {
   variant?: keyof typeof THUMBNAIL_SIZES;
 }
 
-const BookPreviewImage: React.FC<BookPreviewImageProps> = ({ id, title, src, variant = 'sm' }) => {
+const BookPreviewImage = ({ id, title, src, variant = 'sm' }: BookPreviewImageProps) => {
   const [showThumbnail, setShowThumbnail] = useState(false);
   const size = THUMBNAIL_SIZES[variant];
   const handleError = () => {

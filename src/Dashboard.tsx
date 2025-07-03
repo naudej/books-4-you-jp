@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
@@ -8,8 +7,9 @@ import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { Button, Grid, Stack } from '@mui/material';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import Typography from '@mui/material/Typography';
+import React from 'react';
 
-const ErrorFallback: React.FC<FallbackProps> = ({ resetErrorBoundary }) => {
+const ErrorFallback = ({ resetErrorBoundary }: FallbackProps) => {
   const navigate = useNavigate();
   const retry = () => {
     navigate('/');
@@ -43,7 +43,7 @@ const logError = (error: Error, info: React.ErrorInfo) => {
   console.error('Component Stack:', info.componentStack);
 };
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   return (
     <DashboardLayout hideNavigation={true}>
       <SnackbarProvider>

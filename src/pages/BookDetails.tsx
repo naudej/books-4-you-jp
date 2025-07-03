@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Chip, Divider, Grid, Link } from '@mui/material';
 import { useParams } from 'react-router';
@@ -13,7 +12,7 @@ import ErrorBox from '../components/ErrorBox.tsx';
 import BookPreviewImage from '../components/BookPreviewImage.tsx';
 import { format } from 'date-fns';
 
-const BookDetails: React.FC = () => {
+const BookDetails = () => {
   const { bookId } = useParams<{ bookId: string }>();
   const { book, loading, error } = useBookById(bookId);
 

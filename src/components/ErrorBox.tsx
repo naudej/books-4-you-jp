@@ -1,4 +1,3 @@
-import * as React from 'react';
 import BackButton from './BackButton.tsx';
 import Stack from '@mui/material/Stack';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
@@ -8,7 +7,7 @@ import { LARGE_ICON } from '../utils/constants.ts';
 interface ErrorBoxProps {
   showBackButton?: boolean;
 }
-const ErrorBox: React.FC<ErrorBoxProps> = ({ showBackButton = true }) => (
+const ErrorBox = ({ showBackButton = true }: ErrorBoxProps) => (
   <>
     {showBackButton && <BackButton />}
     <Stack

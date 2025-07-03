@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Avatar, Box, TableCell, TableRow, Typography } from '@mui/material';
 import BookPreviewImage from './BookPreviewImage';
 import { blue } from '@mui/material/colors';
@@ -10,7 +9,7 @@ interface BookRowProps {
   onClick: (id: string) => void;
 }
 
-const BookRow: React.FC<BookRowProps> = ({ book, onClick }) => {
+const BookRow = ({ book, onClick }: BookRowProps) => {
   const { id, title, isbn, authors, publishedDate, categories, thumbnail } = book;
 
   return (
