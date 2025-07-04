@@ -56,6 +56,7 @@ const ISBNMaskInput = forwardRef<HTMLInputElement, ISBNMaskProps>(function ISBNM
       {...other}
       {...maskOptions}
       inputRef={ref}
+      data-testid="isbn-input"
       onAccept={(value) => onChange({ target: { name, value } })}
       onBlur={() =>
         onBlur({
@@ -171,6 +172,11 @@ const AddBook = ({ open }: AddBookProps) => {
                 onBlur={handleBlur}
                 error={touched.title && Boolean(errors.title)}
                 helperText={touched.title && errors.title}
+                slotProps={{
+                  htmlInput: {
+                    'data-testid': 'title-input',
+                  },
+                }}
               />
               <TextField
                 fullWidth={true}
@@ -184,6 +190,11 @@ const AddBook = ({ open }: AddBookProps) => {
                 onBlur={handleBlur}
                 error={touched.author && Boolean(errors.author)}
                 helperText={touched.author && errors.author}
+                slotProps={{
+                  htmlInput: {
+                    'data-testid': 'author-input',
+                  },
+                }}
               />
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
