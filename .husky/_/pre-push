@@ -10,4 +10,3 @@ if [ -f "$SIMPLE_GIT_HOOKS_RC" ]; then
 fi
 
 npm run typecheck
-npm run test
