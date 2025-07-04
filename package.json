@@ -8,14 +8,16 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "prepare": "npx simple-git-hooks",
-    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "prettier:format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "prettier:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:silent": "vitest run --silent",
     "test:verbose": "vitest --reporter=verbose",
     "test:ui": "vitest --ui",
     "coverage": "vitest run --coverage",
-    "validate": "npm run typecheck && npm run test:silent"
+    "validate": "npm run typecheck && npm run test:silent",
+    "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
