@@ -102,4 +102,48 @@ describe('AddBook', () => {
       expect(error).not.toBeInTheDocument();
     });
   });
+
+  it('shows validation error for Invalid ISBN-10', async () => {
+    const isbnInput = screen.getByTestId('isbn-input');
+    const radio = document.getElementById('isbn-10-radio') as HTMLInputElement;
+    fireEvent.click(radio);
+
+    fireEvent.input(isbnInput, { target: { value: '0123789' } });
+    fireEvent.focus(isbnInput);
+    fireEvent.blur(isbnInput);
+
+    await screen.findByText(/Invalid ISBN for selected type/i);
+  });
+
+  it('does not show validation error for valid ISBN-10', async () => {
+    const isbnInput = screen.getByTestId('isbn-input');
+    const validISBN = '0-306-40615-2';
+    const radio = document.getElementById('isbn-10-radio') as HTMLInputElement;
+    fireEvent.click(radio);
+
+    fireEvent.input(isbnInput, { target: { value: validISBN } });
+    fireEvent.focus(isbnInput);
+    fireEvent.blur(isbnInput);
+
+    await waitFor(() => {
+      const error = screen.queryByText(/Invalid ISBN for selected type/i);
+      expect(error).not.toBeInTheDocument();
+    });
+  });
+
+  it('does not show validation error for valid ISBN-10 that ends in X', async () => {
+    const isbnInput = screen.getByTestId('isbn-input');
+    const validISBN = '0-8044-2957-X';
+    const radio = document.getElementById('isbn-10-radio') as HTMLInputElement;
+    fireEvent.click(radio);
+
+    fireEvent.input(isbnInput, { target: { value: validISBN } });
+    fireEvent.focus(isbnInput);
+    fireEvent.blur(isbnInput);
+
+    await waitFor(() => {
+      const error = screen.queryByText(/Invalid ISBN for selected type/i);
+      expect(error).not.toBeInTheDocument();
+    });
+  });
 });

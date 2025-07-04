@@ -228,17 +228,18 @@ const AddBook = ({ open }: AddBookProps) => {
                   aria-labelledby="isbn-type-label"
                   value={values.isbnType}
                   onChange={handleChange}
+                  data-testid="isbn-type-radio"
                 >
                   <FormControlLabel
                     aria-label="isbn-10"
                     value={ISBN_TYPES.ISBN_10}
-                    control={<Radio />}
+                    control={<Radio id="isbn-10-radio" />}
                     label="ISBN-10"
                   />
                   <FormControlLabel
                     aria-label="isbn-13"
                     value={ISBN_TYPES.ISBN_13}
-                    control={<Radio />}
+                    control={<Radio id="isbn-13-radio" />}
                     label="ISBN-13"
                   />
                 </RadioGroup>
