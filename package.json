@@ -9,7 +9,11 @@
     "preview": "vite preview",
     "prepare": "npx simple-git-hooks",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:verbose": "vitest --reporter=verbose",
+    "test:ui": "vitest --ui",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -32,6 +36,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
     "@types/dompurify": "^3.2.0",
     "@types/lodash": "^4.17.18",
     "@types/react": "latest",
@@ -40,6 +46,7 @@
     "@typescript-eslint/eslint-plugin": "^8.35.0",
     "@typescript-eslint/parser": "^8.35.0",
     "@vitejs/plugin-react": "latest",
+    "@vitest/ui": "^3.2.4",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-no-inline-styles": "^1.0.5",
@@ -47,10 +54,12 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "jsdom": "^26.1.0",
     "prettier": "^3.6.0",
     "simple-git-hooks": "^2.13.0",
     "typescript": "^5.8.3",
-    "vite": "latest"
+    "vite": "latest",
+    "vitest": "^3.2.4"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged",

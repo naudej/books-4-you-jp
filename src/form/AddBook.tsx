@@ -56,6 +56,7 @@ const ISBNMaskInput = forwardRef<HTMLInputElement, ISBNMaskProps>(function ISBNM
       {...other}
       {...maskOptions}
       inputRef={ref}
+      data-testid="isbn-input"
       onAccept={(value) => onChange({ target: { name, value } })}
       onBlur={() =>
         onBlur({
@@ -171,6 +172,11 @@ const AddBook = ({ open }: AddBookProps) => {
                 onBlur={handleBlur}
                 error={touched.title && Boolean(errors.title)}
                 helperText={touched.title && errors.title}
+                slotProps={{
+                  htmlInput: {
+                    'data-testid': 'title-input',
+                  },
+                }}
               />
               <TextField
                 fullWidth={true}
@@ -184,6 +190,11 @@ const AddBook = ({ open }: AddBookProps) => {
                 onBlur={handleBlur}
                 error={touched.author && Boolean(errors.author)}
                 helperText={touched.author && errors.author}
+                slotProps={{
+                  htmlInput: {
+                    'data-testid': 'author-input',
+                  },
+                }}
               />
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
@@ -217,17 +228,18 @@ const AddBook = ({ open }: AddBookProps) => {
                   aria-labelledby="isbn-type-label"
                   value={values.isbnType}
                   onChange={handleChange}
+                  data-testid="isbn-type-radio"
                 >
                   <FormControlLabel
                     aria-label="isbn-10"
                     value={ISBN_TYPES.ISBN_10}
-                    control={<Radio />}
+                    control={<Radio id="isbn-10-radio" />}
                     label="ISBN-10"
                   />
                   <FormControlLabel
                     aria-label="isbn-13"
                     value={ISBN_TYPES.ISBN_13}
-                    control={<Radio />}
+                    control={<Radio id="isbn-13-radio" />}
                     label="ISBN-13"
                   />
                 </RadioGroup>
