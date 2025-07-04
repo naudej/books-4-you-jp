@@ -11,9 +11,11 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
+    "test:silent": "vitest run --silent",
     "test:verbose": "vitest --reporter=verbose",
     "test:ui": "vitest --ui",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "validate": "npm run typecheck && npm run test:silent"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -63,7 +65,7 @@
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged",
-    "pre-push": "npm run typecheck"
+    "pre-push": "npm run validate"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
