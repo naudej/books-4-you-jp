@@ -16,7 +16,8 @@ export const useBookSubmit = () => {
           message: 'What it was actually successful? Something is fishy here!',
           type: 'success',
         });
-      } catch (err) {
+      } catch (error) {
+        console.error(error);
         showSnackbar({
           message:
             'Lets all pretend that was successful, we all know it wasnt ;) because Google API is read-only',

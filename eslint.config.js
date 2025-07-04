@@ -39,9 +39,9 @@ export default [
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
-          argsIgnorePattern: '^_', // ignore unused function args with leading _
-          varsIgnorePattern: '^_', // ignore unused variables with leading _
-          caughtErrorsIgnorePattern: '^_', // ignore unused catch clause vars with leading _
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
         },
       ],
       '@typescript-eslint/consistent-type-assertions': 'error',
