@@ -13,7 +13,7 @@ const BookRow = ({ book, onClick }: BookRowProps) => {
   const { id, title, isbn, authors, publishedDate, categories, thumbnail } = book;
 
   return (
-    <TableRow hover={true} onClick={() => onClick(id)} key={id}>
+    <TableRow hover={true} sx={{ cursor: 'pointer' }} onClick={() => onClick(id)} key={id}>
       <TableCell id={id}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <BookPreviewImage id={id} title={title} src={thumbnail} />

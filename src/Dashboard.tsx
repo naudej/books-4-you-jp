@@ -50,7 +50,7 @@ const Dashboard = () => {
         <PageContainer>
           <Paper
             elevation={3}
-            sx={{ width: '100%', height: '100%', padding: '25px', borderRadius: '10px' }}
+            sx={{ width: '100%', height: '100%', padding: '30px', borderRadius: '8px' }}
           >
             <ErrorBoundary FallbackComponent={ErrorFallback} onError={logError}>
               {/*Thought about adding a Suspense here but none of my routes are lazy loaded so its not really needed*/}
