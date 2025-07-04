@@ -1,7 +1,5 @@
-import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { Avatar, Chip, Divider, Grid, Link } from '@mui/material';
-import { LARGE_THUMBNAIL } from '../utils/constants.ts';
+import { Chip, Divider, Grid, Link } from '@mui/material';
 import { useParams } from 'react-router';
 import useBookById from '../data/useBookById.ts';
 import Stack from '@mui/material/Stack';
@@ -11,8 +9,10 @@ import InfoItem from '../components/InfoItem.tsx';
 import LoadingBookDetails from '../components/LoadingBookDetails.tsx';
 import BackButton from '../components/BackButton.tsx';
 import ErrorBox from '../components/ErrorBox.tsx';
+import BookPreviewImage from '../components/BookPreviewImage.tsx';
+import { format } from 'date-fns';
 
-const BookDetails: React.FC = () => {
+const BookDetails = () => {
   const { bookId } = useParams<{ bookId: string }>();
   const { book, loading, error } = useBookById(bookId);
 
@@ -34,6 +34,12 @@ const BookDetails: React.FC = () => {
     previewLink,
     buyLink,
     retailPrice,
+    publishedDate,
+    id,
+    publisher,
+    pageCount,
+    isbn,
+    language,
   } = book;
   return (
     <Stack spacing={3} direction="column">
@@ -49,17 +55,10 @@ const BookDetails: React.FC = () => {
           sx={{
             alignItems: 'center',
           }}
-          spacing={1}
+          spacing={2}
         >
           <BackButton />
-          {/*//@TODO Use BookPreviewImage here variant sm and variant lg*/}
-          <Avatar
-            alt={title}
-            src={thumbnail}
-            sx={{ width: LARGE_THUMBNAIL, height: LARGE_THUMBNAIL }}
-          >
-            {title.charAt(0)}
-          </Avatar>
+          <BookPreviewImage title={title} src={thumbnail} variant="lg" />
           <Stack direction="column" spacing={2}>
             <Typography noWrap={true} variant="h5">
               {title}
@@ -80,7 +79,6 @@ const BookDetails: React.FC = () => {
                 </Typography>
               ))}
             </Stack>
-            {/*//@TODO need to assign icons and colors to different known categories*/}
           </Stack>
         </Stack>
         <Stack>{retailPrice && buyLink && <BuyButton link={buyLink} price={retailPrice} />}</Stack>
@@ -96,7 +94,6 @@ const BookDetails: React.FC = () => {
           <Chip label={category} variant="outlined" key={category} />
         ))}
       </Stack>
-      {/*//@TODO for long descriptions + mobile view add a show more*/}
       {description && (
         <Typography
           variant="body1"
@@ -117,16 +114,19 @@ const BookDetails: React.FC = () => {
       <Grid container={true}>
         <Grid size={6}>
           <Stack spacing={1}>
-            <InfoItem label="ID" value={book.id} />
-            <InfoItem label="ISBN" value={book.isbn} />
-            <InfoItem label="Language" value={book.language} />
+            <InfoItem label="ID" value={id} />
+            <InfoItem label="ISBN" value={isbn} />
+            <InfoItem label="Language" value={language} />
           </Stack>
         </Grid>
         <Grid size={6}>
           <Stack spacing={1}>
-            <InfoItem label="Published Date" value={book.publishedDate} />
-            <InfoItem label="Publisher" value={book.publisher} />
-            <InfoItem label="Page Count" value={book.pageCount} />
+            <InfoItem
+              label="Published Date"
+              value={publishedDate ? format(publishedDate, 'dd/MM/yyyy') : 'Unknown'}
+            />
+            <InfoItem label="Publisher" value={publisher} />
+            <InfoItem label="Page Count" value={pageCount} />
           </Stack>
         </Grid>
       </Grid>

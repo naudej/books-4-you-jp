@@ -1,4 +1,3 @@
-import * as React from 'react';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -14,7 +13,7 @@ interface TableHeaderProps {
   headers: HeadCell[];
 }
 
-const TableHeader: React.FC<TableHeaderProps> = ({ order, orderBy, onRequestSort, headers }) => {
+const TableHeader = ({ order, orderBy, onRequestSort, headers }: TableHeaderProps) => {
   const createSortHandler = (property: keyof Book) => {
     onRequestSort(property);
   };
@@ -23,12 +22,21 @@ const TableHeader: React.FC<TableHeaderProps> = ({ order, orderBy, onRequestSort
     <TableHead>
       <TableRow>
         {headers.map((header) => (
-          // @TODO The whole TableCell should be clickable according to the specs
-          <TableCell key={header.id} sortDirection={orderBy === header.id ? order : false}>
+          <TableCell
+            role="button"
+            onClick={() => createSortHandler(header.id)}
+            sx={{
+              cursor: 'pointer',
+              '&:hover': {
+                backgroundColor: 'action.hover',
+              },
+            }}
+            key={header.id}
+            sortDirection={orderBy === header.id ? order : false}
+          >
             <TableSortLabel
               active={orderBy === header.id}
               direction={orderBy === header.id ? order : 'asc'}
-              onClick={() => createSortHandler(header.id)}
             >
               {header.label}
               {orderBy === header.id ? (

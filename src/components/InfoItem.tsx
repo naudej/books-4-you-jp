@@ -1,13 +1,12 @@
-import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 
-type InfoItemProps = {
+interface InfoItemProps {
   label: string;
   value?: string | number | null;
-};
+}
 
-const InfoItem: React.FC<InfoItemProps> = ({ label, value }) => (
+const InfoItem = ({ label, value }: InfoItemProps) => (
   <Box>
     <Typography variant="body1" display="inline">
       {label}:{' '}

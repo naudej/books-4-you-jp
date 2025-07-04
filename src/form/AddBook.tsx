@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 import {
   Drawer,
   Button,
@@ -72,8 +72,8 @@ const ISBNMaskInput = forwardRef<HTMLInputElement, ISBNMaskProps>(function ISBNM
 interface AddBookProps {
   open: boolean;
 }
-//@TODO improvement move Textfields to another component that avoids all the bloat added to the Textfield e.g. <Input name="author" value={values.title} /> somehow uses the values.title to call the correct helpers, maybe can use FormikContext or useFormik here
-const AddBook: React.FC<AddBookProps> = ({ open }) => {
+
+const AddBook = ({ open }: AddBookProps) => {
   const navigate = useNavigate();
   const { submit } = useBookSubmit();
   const {
@@ -102,7 +102,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
   });
 
   const isbnMask = values.isbnType === ISBN_TYPES.ISBN_10 ? isbn10Mask : isbn13Mask;
-  const [openCancelConfirm, setCancelConfirm] = React.useState(false);
+  const [openCancelConfirm, setCancelConfirm] = useState(false);
 
   const handleClose = () => {
     const { author, title, isbn } = values;
@@ -128,6 +128,8 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
       <Drawer
         anchor="right"
         open={open}
+        role="dialog"
+        aria-labelledby="create-book-drawer"
         onClose={handleClose}
         slotProps={{
           paper: {
@@ -186,6 +188,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label="Published Date"
+                  aria-label="published-date"
                   value={values.publishedDate}
                   onChange={(date) => {
                     setFieldValue('publishedDate', date);
@@ -205,19 +208,24 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
                 />
               </LocalizationProvider>
               <FormControl required={true} component="fieldset">
-                <FormLabel component="legend">ISBN Type</FormLabel>
+                <FormLabel id="isbn-type-label" component="legend" aria-label="isbn-type">
+                  ISBN Type
+                </FormLabel>
                 <RadioGroup
                   row={true}
                   name="isbnType"
+                  aria-labelledby="isbn-type-label"
                   value={values.isbnType}
                   onChange={handleChange}
                 >
                   <FormControlLabel
+                    aria-label="isbn-10"
                     value={ISBN_TYPES.ISBN_10}
                     control={<Radio />}
                     label="ISBN-10"
                   />
                   <FormControlLabel
+                    aria-label="isbn-13"
                     value={ISBN_TYPES.ISBN_13}
                     control={<Radio />}
                     label="ISBN-13"
@@ -227,6 +235,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
               <TextField
                 name="isbn"
                 label="ISBN"
+                aria-label="isbn-input"
                 required={true}
                 value={values.isbn}
                 onChange={handleChange}
@@ -242,11 +251,19 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
               />
             </Stack>
             <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end' }}>
-              <Button onClick={handleClose}>Close</Button>
-              <Button onClick={() => resetForm()} color="warning">
+              <Button onClick={handleClose} aria-label="close-btn">
+                Close
+              </Button>
+              <Button onClick={() => resetForm()} color="warning" aria-label="reset-btn">
                 Reset
               </Button>
-              <Button color="primary" disabled={!isValid} variant="contained" type="submit">
+              <Button
+                color="primary"
+                aria-label="submit-btn"
+                disabled={!isValid}
+                variant="contained"
+                type="submit"
+              >
                 Submit
               </Button>
             </Stack>
@@ -254,6 +271,7 @@ const AddBook: React.FC<AddBookProps> = ({ open }) => {
         </form>
       </Drawer>
       <ConfirmDialog
+        aria-label="cancel-dialog"
         title={'No dont go!'}
         description={
           'You just got started creating your very own book, are you sure you want to leave now?'

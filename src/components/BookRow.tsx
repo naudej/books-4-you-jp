@@ -1,7 +1,6 @@
-import * as React from 'react';
 import { Avatar, Box, TableCell, TableRow, Typography } from '@mui/material';
 import BookPreviewImage from './BookPreviewImage';
-import { deepOrange } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
 import { Book } from '../data/types.ts';
 import { format } from 'date-fns';
 
@@ -10,11 +9,11 @@ interface BookRowProps {
   onClick: (id: string) => void;
 }
 
-const BookRow: React.FC<BookRowProps> = ({ book, onClick }) => {
+const BookRow = ({ book, onClick }: BookRowProps) => {
   const { id, title, isbn, authors, publishedDate, categories, thumbnail } = book;
 
   return (
-    <TableRow hover={true} onClick={() => onClick(id)} key={id} sx={{ cursor: 'pointer' }}>
+    <TableRow hover={true} onClick={() => onClick(id)} key={id}>
       <TableCell id={id}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <BookPreviewImage id={id} title={title} src={thumbnail} />
@@ -38,9 +37,9 @@ const BookRow: React.FC<BookRowProps> = ({ book, onClick }) => {
           >
             <Avatar
               sx={{
-                bgcolor: deepOrange[200],
-                width: 24,
-                height: 24,
+                bgcolor: blue[300],
+                width: 30,
+                height: 30,
                 marginRight: '10px',
               }}
             >

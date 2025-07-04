@@ -1,25 +1,24 @@
 import Stack from '@mui/material/Stack';
 import { Divider, Skeleton, SkeletonProps } from '@mui/material';
-import { LARGE_THUMBNAIL } from '../utils/constants.ts';
+import { THUMBNAIL_SIZES } from '../utils/constants.ts';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
 import BackButton from './BackButton.tsx';
 
-const SectionSkeleton: React.FC<SkeletonProps> = ({
+const SectionSkeleton = ({
   animation = 'wave',
   variant = 'rectangular',
   ...props
-}) => {
+}: SkeletonProps) => {
   return <Skeleton animation={animation} variant={variant} {...props} />;
 };
 
-const LoadingBookDetails: React.FC = () => {
+const LoadingBookDetails = () => {
   return (
     <Stack spacing={3}>
       <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Stack direction="row" spacing={2} alignItems="center">
           <BackButton />
-          <SectionSkeleton variant="circular" width={LARGE_THUMBNAIL} height={LARGE_THUMBNAIL} />
+          <SectionSkeleton style={{ ...THUMBNAIL_SIZES['lg'] }} />
           <Stack spacing={1}>
             <Typography variant="h3">
               <SectionSkeleton width={400} />

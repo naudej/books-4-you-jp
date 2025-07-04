@@ -15,7 +15,7 @@ interface SearchInputProps {
   inputValue: string;
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({
+const SearchInput = ({
   options = [],
   onInputChange,
   onSearchSubmit,
@@ -25,7 +25,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   error,
   inputValue,
   onOptionSelect,
-}) => {
+}: SearchInputProps) => {
   const handleKeyPress = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && inputValue.trim().length >= 3) {
       onSearchSubmit(inputValue);
@@ -56,14 +56,14 @@ const SearchInput: React.FC<SearchInputProps> = ({
         <TextField
           {...params}
           label={label}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyPress}
           placeholder={placeholder}
           InputProps={{
             ...params.InputProps,
             endAdornment: (
               <>
                 {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                <IconButton aria-label="delete" onClick={handleIconClick}>
+                <IconButton aria-label="search" onClick={handleIconClick}>
                   <SearchIcon />
                 </IconButton>
                 {params.InputProps.endAdornment}
