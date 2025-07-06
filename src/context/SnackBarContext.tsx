@@ -75,7 +75,7 @@ export const SnackbarProvider = ({ children }: { children: ReactNode }) => {
           action={action}
           sx={{ width: '100%' }}
         >
-          {alertTitle && <AlertTitle>{alertTitle}</AlertTitle>}
+          {alertTitle && <AlertTitle aria-label={alertTitle}>{alertTitle}</AlertTitle>}
           {message}
         </Alert>
       </Snackbar>
