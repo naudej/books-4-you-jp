@@ -129,8 +129,9 @@ const AddBook = ({ open }: AddBookProps) => {
       <Drawer
         anchor="right"
         open={open}
+        aria-modal={true}
         role="dialog"
-        aria-labelledby="create-book-drawer"
+        aria-label="Create Book"
         onClose={handleClose}
         slotProps={{
           paper: {

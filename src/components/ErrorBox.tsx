@@ -15,8 +15,10 @@ const ErrorBox = ({ showBackButton = true }: ErrorBoxProps) => (
       direction="column"
       sx={{ width: '100%', height: '80%', justifyContent: 'center', alignItems: 'center' }}
     >
-      <WarningAmberIcon color="error" sx={{ fontSize: LARGE_ICON }} />
-      <Typography variant="h5">Oops something went wrong!!</Typography>
+      <WarningAmberIcon aria-hidden={true} color="error" sx={{ fontSize: LARGE_ICON }} />
+      <Typography aria-label="Error loading book details" variant="h5">
+        Oops something went wrong!!
+      </Typography>
       <Typography variant="body2" color="textSecondary">
         Classic demo day issues
       </Typography>

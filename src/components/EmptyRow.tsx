@@ -10,10 +10,16 @@ const EmptyMessage = () => (
       direction="row"
       sx={{ width: '100%', alignItems: 'center', justifyContent: 'center', mb: '15px' }}
     >
-      <SentimentDissatisfiedIcon color="disabled" sx={{ fontSize: MEDIUM_ICON }} />
-      <Typography variant="h5">No books found.</Typography>
+      <SentimentDissatisfiedIcon
+        aria-hidden={true}
+        color="disabled"
+        sx={{ fontSize: MEDIUM_ICON }}
+      />
+      <Typography aria-label="No Books found" variant="h5">
+        No books found.
+      </Typography>
     </Stack>
-    <Typography variant="body1" color="text.secondary">
+    <Typography variant="body1" color="textSecondary">
       I hope you were looking for a very obscure book, otherwise this is a little awkward.
     </Typography>
   </>
@@ -24,9 +30,9 @@ interface EmptyRowProps {
   loading?: boolean;
 }
 const EmptyRow = ({ colSpan, loading = false }: EmptyRowProps) => (
-  <TableRow sx={{ height: 200 }}>
+  <TableRow aria-busy={loading} sx={{ height: 200 }}>
     <TableCell colSpan={colSpan} align="center">
-      {loading ? <CircularProgress size={60} /> : <EmptyMessage />}
+      {loading ? <CircularProgress aria-hidden={true} size={60} /> : <EmptyMessage />}
     </TableCell>
   </TableRow>
 );

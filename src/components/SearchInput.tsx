@@ -55,6 +55,7 @@ const SearchInput = ({
       renderInput={(params) => (
         <TextField
           {...params}
+          aria-label={label}
           label={label}
           onKeyDown={handleKeyPress}
           placeholder={placeholder}
@@ -62,9 +63,9 @@ const SearchInput = ({
             ...params.InputProps,
             endAdornment: (
               <>
-                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {loading ? <CircularProgress aria-hidden={true} color="inherit" size={20} /> : null}
                 <IconButton aria-label="search" onClick={handleIconClick}>
-                  <SearchIcon />
+                  <SearchIcon aria-hidden={true} />
                 </IconButton>
                 {params.InputProps.endAdornment}
               </>
@@ -72,9 +73,11 @@ const SearchInput = ({
           }}
         />
       )}
-      renderOption={(props, option) => (
-        <li {...props} key={option.id}>
-          <Typography variant="body2">{option.title}</Typography>
+      renderOption={(props, { id, title }) => (
+        <li {...props} key={id}>
+          <Typography aria-label={title} variant="body2">
+            {title}
+          </Typography>
         </li>
       )}
     />

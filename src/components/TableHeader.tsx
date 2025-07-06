@@ -21,25 +21,26 @@ const TableHeader = ({ order, orderBy, onRequestSort, headers }: TableHeaderProp
   return (
     <TableHead>
       <TableRow>
-        {headers.map((header) => (
+        {headers.map(({ id, label }) => (
           <TableCell
             role="button"
-            onClick={() => createSortHandler(header.id)}
+            onClick={() => createSortHandler(id)}
             sx={{
               cursor: 'pointer',
               '&:hover': {
                 backgroundColor: 'action.hover',
               },
             }}
-            key={header.id}
-            sortDirection={orderBy === header.id ? order : false}
+            key={id}
+            sortDirection={orderBy === id ? order : false}
           >
             <TableSortLabel
-              active={orderBy === header.id}
-              direction={orderBy === header.id ? order : 'asc'}
+              aria-label={`Sort by ${label}`}
+              active={orderBy === id}
+              direction={orderBy === id ? order : 'asc'}
             >
-              {header.label}
-              {orderBy === header.id ? (
+              {label}
+              {orderBy === id ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>

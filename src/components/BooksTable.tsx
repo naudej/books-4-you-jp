@@ -70,7 +70,7 @@ const BooksTable = ({
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+          <Table sx={{ minWidth: 750 }} aria-label="Book Catalogue" aria-busy={loading}>
             <TableHeader
               headers={tableHeaders}
               order={order}

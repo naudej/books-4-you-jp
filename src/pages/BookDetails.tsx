@@ -60,21 +60,27 @@ const BookDetails = () => {
           <BackButton />
           <BookPreviewImage title={title} src={thumbnail} variant="lg" />
           <Stack direction="column" spacing={2}>
-            <Typography noWrap={true} variant="h5">
+            <Typography noWrap={true} aria-label={title} variant="h5">
               {title}
             </Typography>
             {subtitle && (
-              <Typography noWrap={true} variant="h6" color="textSecondary">
+              <Typography noWrap={true} aria-label={subtitle} variant="h6" color="textSecondary">
                 {subtitle}
               </Typography>
             )}
             <Stack
               direction="row"
-              divider={<Divider orientation="vertical" flexItem={true} />}
+              divider={<Divider orientation="vertical" aria-hidden={true} flexItem={true} />}
               spacing={2}
             >
               {authors.map((author) => (
-                <Typography noWrap={true} color="textSecondary" variant="subtitle2" key={author}>
+                <Typography
+                  noWrap={true}
+                  color="textSecondary"
+                  aria-label={author}
+                  variant="subtitle2"
+                  key={author}
+                >
                   {author}
                 </Typography>
               ))}
@@ -91,7 +97,7 @@ const BookDetails = () => {
         sx={{ maxWidth: '100%' }}
       >
         {categories.map((category) => (
-          <Chip label={category} variant="outlined" key={category} />
+          <Chip label={category} variant="outlined" aria-label={category} key={category} />
         ))}
       </Stack>
       {description && (
@@ -102,13 +108,18 @@ const BookDetails = () => {
         />
       )}
       <Typography variant="body2" color="textSecondary">
-        Do you want to know more?{' '}
-        <Link href={previewLink} target="_blank" variant="body2">
+        Do you want to know more?
+        <Link
+          href={previewLink}
+          aria-label={`Find out more about ${title}`}
+          target="_blank"
+          variant="body2"
+        >
           Click here
         </Link>
       </Typography>
       <Divider />
-      <Typography variant="h6" gutterBottom={true}>
+      <Typography variant="h6" aria-label="Additional information" gutterBottom={true}>
         Additional Information:
       </Typography>
       <Grid container={true}>

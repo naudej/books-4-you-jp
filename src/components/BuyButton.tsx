@@ -19,9 +19,13 @@ const BuyButton = ({ link, price, ariaLabel = 'Add to shopping cart' }: BuyButto
       color="primary"
       aria-label={ariaLabel}
       variant="text"
-      startIcon={<AddShoppingCartIcon />}
+      startIcon={<AddShoppingCartIcon aria-hidden={true} />}
     >
-      <Typography variant="h6" color="textSecondary">
+      <Typography
+        variant="h6"
+        aria-label={`${formatCurrency(amount, currencyCode)}`}
+        color="textSecondary"
+      >
         {formatCurrency(amount, currencyCode)}
       </Typography>
     </Button>

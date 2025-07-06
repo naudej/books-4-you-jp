@@ -8,10 +8,10 @@ interface InfoItemProps {
 
 const InfoItem = ({ label, value }: InfoItemProps) => (
   <Box>
-    <Typography variant="body1" display="inline">
-      {label}:{' '}
+    <Typography aria-label={label} variant="body1" display="inline">
+      {label}:
     </Typography>
-    <Typography variant="body2" color="textSecondary" display="inline">
+    <Typography aria-label={`${value}`} variant="body2" color="textSecondary" display="inline">
       {value ?? 'N/A'}
     </Typography>
   </Box>
