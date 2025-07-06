@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -67,28 +66,26 @@ const BooksTable = ({
   );
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-label="Book Catalogue" aria-busy={loading}>
-            <TableHeader
-              headers={tableHeaders}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-            />
-            <TableBody>
-              {sortedBooks.length === 0 && (
-                <EmptyRow colSpan={tableHeaders.length} loading={loading} />
-              )}
-              {sortedBooks.map((book) => (
-                <BookRow book={book} key={book.id} onClick={onRowClick} />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    </Box>
+    <Paper>
+      <TableContainer>
+        <Table aria-label="Book Catalogue" aria-busy={loading}>
+          <TableHeader
+            headers={tableHeaders}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+          />
+          <TableBody>
+            {(sortedBooks.length === 0 || loading) && (
+              <EmptyRow colSpan={tableHeaders.length} loading={loading} />
+            )}
+            {sortedBooks.map((book) => (
+              <BookRow book={book} key={book.id} onClick={onRowClick} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   );
 };
 export default BooksTable;
