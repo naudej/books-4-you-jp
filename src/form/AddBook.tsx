@@ -215,10 +215,6 @@ const AddBook = ({ open }: AddBookProps) => {
                       onBlur: handleBlur,
                       required: true,
                       error: touched.publishedDate && Boolean(errors.publishedDate),
-                      helperText:
-                        touched.publishedDate && typeof errors.publishedDate === 'string'
-                          ? errors.publishedDate
-                          : '',
                     },
                   }}
                 />
