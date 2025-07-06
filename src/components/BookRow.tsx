@@ -3,6 +3,7 @@ import BookPreviewImage from './BookPreviewImage';
 import { blue } from '@mui/material/colors';
 import { Book } from '../data/types.ts';
 import { format } from 'date-fns';
+import { truncText } from '../utils/utils.ts';
 
 interface BookRowProps {
   book: Book;
@@ -31,7 +32,7 @@ const BookRow = ({ book, onClick }: BookRowProps) => {
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <BookPreviewImage id={id} title={title} src={thumbnail} />
           <Typography variant="body1" pl="10px">
-            {title}
+            {truncText(title, 80)}
           </Typography>
         </Box>
       </TableCell>

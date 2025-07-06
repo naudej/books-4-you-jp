@@ -12,8 +12,7 @@ import {
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router';
 import EmptyMessage from './EmptyMessage.tsx';
-
-const CHAR_LIMIT = 40;
+import { truncText } from '../utils/utils.ts';
 
 interface BooksCardsProps {
   books: Book[];
@@ -54,7 +53,7 @@ const BooksCards = ({ books, loading }: BooksCardsProps) => {
                 </Stack>
                 <CardContent>
                   <Typography aria-label={title} variant="h6">
-                    {title.length > CHAR_LIMIT ? `${title.slice(0, CHAR_LIMIT)}...` : title}
+                    {truncText(title)}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
                     {authors.join(', ')}
