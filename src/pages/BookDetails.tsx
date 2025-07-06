@@ -43,38 +43,43 @@ const BookDetails = () => {
   } = book;
   return (
     <Stack spacing={3} direction="column">
-      <Grid container={true} spacing={2} alignItems="center">
+      <Grid container={true} spacing={3} alignItems="center">
         <Grid
           size={{ xs: 12, md: 2 }}
           container={true}
           alignItems="center"
           justifyContent="center"
+          direction={{ xs: 'column', md: 'row' }}
           spacing={1}
         >
-          <Stack
-            direction={{ xs: 'column', md: 'row' }}
-            spacing={2}
-            alignItems="center"
-            justifyContent="center"
-          >
-            <BackButton />
-            <BookPreviewImage title={title} src={thumbnail} variant="lg" />
-          </Stack>
+          <BackButton />
+          <BookPreviewImage title={title} src={thumbnail} variant="lg" />
         </Grid>
         <Grid size={{ xs: 12, md: 8 }} spacing={2}>
-          <Typography variant="h5" aria-label={title}>
+          <Typography
+            variant="h5"
+            sx={{ textAlign: { xs: 'center', md: 'left' } }}
+            aria-label={title}
+          >
             {title}
           </Typography>
           {subtitle && (
-            <Typography variant="h6" aria-label={subtitle} color="textSecondary">
+            <Typography
+              sx={{ textAlign: { xs: 'center', md: 'left' } }}
+              variant="h6"
+              aria-label={subtitle}
+              color="textSecondary"
+            >
               {subtitle}
             </Typography>
           )}
-          {authors.map((author) => (
-            <Typography variant="subtitle2" color="textSecondary" aria-label={author}>
-              {author}
-            </Typography>
-          ))}
+          <Grid container={true} spacing={2} justifyContent={{ xs: 'center', md: 'flex-start' }}>
+            {authors.map((author) => (
+              <Typography variant="subtitle2" color="textSecondary" aria-label={author}>
+                {author}
+              </Typography>
+            ))}
+          </Grid>
         </Grid>
 
         <Grid size={{ xs: 12, md: 2 }}>
@@ -102,6 +107,7 @@ const BookDetails = () => {
       <Typography variant="body2" color="textSecondary">
         Do you want to know more?
         <Link
+          sx={{ marginLeft: '5px' }}
           href={previewLink}
           aria-label={`Find out more about ${title}`}
           target="_blank"
@@ -114,7 +120,7 @@ const BookDetails = () => {
       <Typography variant="h6" aria-label="Additional information" gutterBottom={true}>
         Additional Information:
       </Typography>
-      <Grid container={true}>
+      <Grid container={true} spacing={2}>
         <Grid size={{ xs: 12, md: 6 }}>
           <Stack spacing={1}>
             <InfoItem label="ID" value={id} />
