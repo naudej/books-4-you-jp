@@ -20,6 +20,8 @@ const BookPreviewImage = ({ id, title, src, variant = 'sm' }: BookPreviewImagePr
   if (showThumbnail || !src) {
     return (
       <Box
+        role="img"
+        aria-label={title}
         style={{
           borderRadius: '3px',
           display: 'flex',
@@ -27,7 +29,7 @@ const BookPreviewImage = ({ id, title, src, variant = 'sm' }: BookPreviewImagePr
           justifyContent: 'center',
         }}
       >
-        <BookIcon style={{ ...size }} />
+        <BookIcon aria-hidden={true} style={{ ...size }} />
       </Box>
     );
   }
