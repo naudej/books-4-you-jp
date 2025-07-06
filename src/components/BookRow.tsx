@@ -13,7 +13,20 @@ const BookRow = ({ book, onClick }: BookRowProps) => {
   const { id, title, isbn, authors, publishedDate, categories, thumbnail } = book;
 
   return (
-    <TableRow hover={true} sx={{ cursor: 'pointer' }} onClick={() => onClick(id)} key={id}>
+    <TableRow
+      tabIndex={0}
+      hover={true}
+      aria-label={`View details for ${title}`}
+      sx={{
+        cursor: 'pointer',
+        '&:focus-visible': {
+          border: '2px solid white',
+          borderRadius: '5px',
+        },
+      }}
+      onClick={() => onClick(id)}
+      key={id}
+    >
       <TableCell id={id}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <BookPreviewImage id={id} title={title} src={thumbnail} />
@@ -36,6 +49,7 @@ const BookRow = ({ book, onClick }: BookRowProps) => {
             }}
           >
             <Avatar
+              aria-hidden={true}
               sx={{
                 bgcolor: blue[300],
                 width: 30,
@@ -45,14 +59,19 @@ const BookRow = ({ book, onClick }: BookRowProps) => {
             >
               {author.charAt(0)}
             </Avatar>
-            <Typography variant="body1">{author}</Typography>
+            <Typography aria-label={`Author ${author}`} variant="body1">
+              {author}
+            </Typography>
           </Box>
         ))}
       </TableCell>
-      <TableCell> {publishedDate ? format(publishedDate, 'dd/MM/yyyy') : 'Unknown'}</TableCell>
+      <TableCell aria-label={`Published on ${publishedDate}`}>
+        {publishedDate ? format(publishedDate, 'dd/MM/yyyy') : 'Unknown'}
+      </TableCell>
       <TableCell>
         {categories.map((category) => (
           <Typography
+            aria-label={category}
             variant="body1"
             key={`${category}-${id}`}
             gutterBottom={categories.length > 1}

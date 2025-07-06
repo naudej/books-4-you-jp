@@ -14,7 +14,7 @@ const SectionSkeleton = ({
 
 const LoadingBookDetails = () => {
   return (
-    <Stack spacing={3}>
+    <Stack aria-label="Loading book details" spacing={3}>
       <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
         <Stack direction="row" spacing={2} alignItems="center">
           <BackButton />

@@ -27,8 +27,10 @@ const ConfirmDialog = ({ open, onClose, onConfirm, title, description }: Confirm
       <DialogContentText id="confirm-dialog-description">{description}</DialogContentText>
     </DialogContent>
     <DialogActions>
-      <Button onClick={onClose}>Cancel</Button>
-      <Button onClick={onConfirm} autoFocus={true}>
+      <Button aria-label="Cancel dialog" onClick={onClose}>
+        Cancel
+      </Button>
+      <Button aria-label="Confirm dialog" onClick={onConfirm} autoFocus={true}>
         Confirm
       </Button>
     </DialogActions>
