@@ -43,52 +43,49 @@ const BookDetails = () => {
   } = book;
   return (
     <Stack spacing={3} direction="column">
-      <Stack
-        direction="row"
-        sx={{
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Stack
-          direction="row"
-          sx={{
-            alignItems: 'center',
-          }}
-          spacing={2}
+      <Grid container={true} spacing={3} alignItems="center">
+        <Grid
+          size={{ xs: 12, md: 2 }}
+          container={true}
+          alignItems="center"
+          justifyContent="center"
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={1}
         >
           <BackButton />
           <BookPreviewImage title={title} src={thumbnail} variant="lg" />
-          <Stack direction="column" spacing={2}>
-            <Typography noWrap={true} aria-label={title} variant="h5">
-              {title}
-            </Typography>
-            {subtitle && (
-              <Typography noWrap={true} aria-label={subtitle} variant="h6" color="textSecondary">
-                {subtitle}
-              </Typography>
-            )}
-            <Stack
-              direction="row"
-              divider={<Divider orientation="vertical" aria-hidden={true} flexItem={true} />}
-              spacing={2}
+        </Grid>
+        <Grid size={{ xs: 12, md: 8 }} spacing={2}>
+          <Typography
+            variant="h5"
+            sx={{ textAlign: { xs: 'center', md: 'left' } }}
+            aria-label={title}
+          >
+            {title}
+          </Typography>
+          {subtitle && (
+            <Typography
+              sx={{ textAlign: { xs: 'center', md: 'left' } }}
+              variant="h6"
+              aria-label={subtitle}
+              color="textSecondary"
             >
-              {authors.map((author) => (
-                <Typography
-                  noWrap={true}
-                  color="textSecondary"
-                  aria-label={author}
-                  variant="subtitle2"
-                  key={author}
-                >
-                  {author}
-                </Typography>
-              ))}
-            </Stack>
-          </Stack>
-        </Stack>
-        <Stack>{retailPrice && buyLink && <BuyButton link={buyLink} price={retailPrice} />}</Stack>
-      </Stack>
+              {subtitle}
+            </Typography>
+          )}
+          <Grid container={true} spacing={2} justifyContent={{ xs: 'center', md: 'flex-start' }}>
+            {authors.map((author) => (
+              <Typography variant="subtitle2" color="textSecondary" aria-label={author}>
+                {author}
+              </Typography>
+            ))}
+          </Grid>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 2 }}>
+          {retailPrice && buyLink && <BuyButton link={buyLink} price={retailPrice} />}
+        </Grid>
+      </Grid>
       <Stack
         direction="row"
         spacing={1}
@@ -110,6 +107,7 @@ const BookDetails = () => {
       <Typography variant="body2" color="textSecondary">
         Do you want to know more?
         <Link
+          sx={{ marginLeft: '5px' }}
           href={previewLink}
           aria-label={`Find out more about ${title}`}
           target="_blank"
@@ -122,15 +120,15 @@ const BookDetails = () => {
       <Typography variant="h6" aria-label="Additional information" gutterBottom={true}>
         Additional Information:
       </Typography>
-      <Grid container={true}>
-        <Grid size={6}>
+      <Grid container={true} spacing={2}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Stack spacing={1}>
             <InfoItem label="ID" value={id} />
             <InfoItem label="ISBN" value={isbn} />
             <InfoItem label="Language" value={language} />
           </Stack>
         </Grid>
-        <Grid size={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Stack spacing={1}>
             <InfoItem
               label="Published Date"

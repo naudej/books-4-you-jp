@@ -12,6 +12,7 @@ import {
   FormControlLabel,
   Radio,
   InputBaseComponentProps,
+  useTheme,
 } from '@mui/material';
 import { useNavigate } from 'react-router';
 import CloseIcon from '@mui/icons-material/Close';
@@ -25,6 +26,7 @@ import { HEIGHT_NAVBAR } from '../utils/constants.ts';
 import ConfirmDialog from '../components/ConfirmationDialog.tsx';
 import { bookValidationSchema } from './validationSchemas.ts';
 import { useBookSubmit } from '../data/useBookSubmit.ts';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 type ISBNMask = {
   mask: string;
@@ -104,6 +106,8 @@ const AddBook = ({ open }: AddBookProps) => {
 
   const isbnMask = values.isbnType === ISBN_TYPES.ISBN_10 ? isbn10Mask : isbn13Mask;
   const [openCancelConfirm, setCancelConfirm] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleClose = () => {
     const { author, title, isbn } = values;
@@ -136,6 +140,7 @@ const AddBook = ({ open }: AddBookProps) => {
         slotProps={{
           paper: {
             sx: {
+              width: isMobile ? '100%' : 500,
               height: `calc(100% - ${HEIGHT_NAVBAR})`,
               top: HEIGHT_NAVBAR,
             },
@@ -147,7 +152,6 @@ const AddBook = ({ open }: AddBookProps) => {
             direction="column"
             spacing={2}
             sx={{
-              width: 500,
               padding: '15px 40px',
               justifyContent: 'space-between',
               height: '100%',
@@ -263,14 +267,26 @@ const AddBook = ({ open }: AddBookProps) => {
                 }}
               />
             </Stack>
-            <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end' }}>
-              <Button onClick={handleClose} aria-label="close-btn">
-                Close
-              </Button>
-              <Button onClick={() => resetForm()} color="warning" aria-label="reset-btn">
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              spacing={2}
+              sx={{ justifyContent: 'flex-end' }}
+            >
+              {!isMobile && (
+                <Button onClick={handleClose} aria-label="close-btn">
+                  Close
+                </Button>
+              )}
+              <Button
+                fullWidth={isMobile}
+                onClick={() => resetForm()}
+                color="warning"
+                aria-label="reset-btn"
+              >
                 Reset
               </Button>
               <Button
+                fullWidth={isMobile}
                 color="primary"
                 aria-label="submit-btn"
                 disabled={!isValid}

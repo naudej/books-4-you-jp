@@ -1,6 +1,6 @@
 import BooksTable from '../components/BooksTable.tsx';
 import { Book, HeadCell, Order, SearchOption } from '../data/types.ts';
-import { Button, Grid, Stack } from '@mui/material';
+import { Button, Grid, Stack, useTheme } from '@mui/material';
 import SearchInput from '../components/SearchInput.tsx';
 import useBooks from '../data/useBooks.ts';
 import { useMatch, useNavigate, useSearchParams } from 'react-router';
@@ -8,6 +8,8 @@ import { useCallback, useEffect, useState } from 'react';
 import useBookSuggestions from '../data/useBookSuggestions.ts';
 import AddIcon from '@mui/icons-material/Add';
 import AddBook from '../form/AddBook.tsx';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import BooksCards from '../components/BooksCards.tsx';
 
 const CatalogueHeaders: HeadCell[] = [
   {
@@ -38,7 +40,7 @@ const CatalogueHeaders: HeadCell[] = [
 
 const Catalogue = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const searchTerm = searchParams.get('q') || 'harry';
+  const searchTerm = searchParams.get('q') || 'Witcher';
   const sortByParam = (searchParams.get('sortBy') as keyof Book) || 'title';
   const orderParam = (searchParams.get('order') as Order) || 'asc';
   const { books, loading, error } = useBooks(searchTerm);
@@ -47,6 +49,8 @@ const Catalogue = () => {
   const { searchOptions, fetchSuggestions, loading: loadingSuggestions } = useBookSuggestions();
   const navigate = useNavigate();
   const openCreate = useMatch('/create');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     setInputValue(searchTerm);
@@ -80,6 +84,7 @@ const Catalogue = () => {
     <Stack spacing={4}>
       <Grid
         container={true}
+        spacing={3}
         direction="row"
         sx={{
           justifyContent: 'space-between',
@@ -97,20 +102,29 @@ const Catalogue = () => {
           onInputChange={handleAutocompleteInputChange}
           onSearchSubmit={handleSearchSubmit}
         />
-        <Button variant="contained" onClick={() => navigate('/create')} endIcon={<AddIcon />}>
+        <Button
+          fullWidth={isMobile}
+          variant="contained"
+          onClick={() => navigate('/create')}
+          endIcon={<AddIcon />}
+        >
           Add Book
         </Button>
       </Grid>
-      <BooksTable
-        initialSortBy={sortByParam}
-        initialOrder={orderParam}
-        onSortChange={(updatedSortBy, updatedOrderBy) =>
-          setSearchParams({ q: searchTerm, sortBy: updatedSortBy, order: updatedOrderBy })
-        }
-        books={books}
-        tableHeaders={CatalogueHeaders}
-        loading={loading}
-      />
+      {isMobile ? (
+        <BooksCards books={books} loading={loading} />
+      ) : (
+        <BooksTable
+          initialSortBy={sortByParam}
+          initialOrder={orderParam}
+          onSortChange={(updatedSortBy, updatedOrderBy) =>
+            setSearchParams({ q: searchTerm, sortBy: updatedSortBy, order: updatedOrderBy })
+          }
+          books={books}
+          tableHeaders={CatalogueHeaders}
+          loading={loading}
+        />
+      )}
       <AddBook open={Boolean(openCreate)} />
     </Stack>
   );

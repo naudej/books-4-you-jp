@@ -63,7 +63,7 @@ const SearchInput = ({
             ...params.InputProps,
             endAdornment: (
               <>
-                {loading ? <CircularProgress aria-hidden={true} color="inherit" size={20} /> : null}
+                {loading ? <CircularProgress aria-hidden={true} color="primary" size={20} /> : null}
                 <IconButton aria-label="search" onClick={handleIconClick}>
                   <SearchIcon aria-hidden={true} />
                 </IconButton>

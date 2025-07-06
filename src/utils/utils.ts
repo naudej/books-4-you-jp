@@ -1,5 +1,6 @@
 import { IndustryIdentifier, ISBN_TYPES } from '../data/types.ts';
 import { isValid, parseISO } from 'date-fns';
+import { CHAR_LIMIT } from './constants.ts';
 
 export const getIsbnNumber = (industryIdentifiers: IndustryIdentifier[]) => {
   const isbn13 = industryIdentifiers.find((isbn) => isbn.type === ISBN_TYPES.ISBN_13);
@@ -33,4 +34,9 @@ export const formatCurrency = (amount: number, currency: string, locale = 'en-US
     style: 'currency',
     currency,
   }).format(amount);
+};
+
+export const truncText = (text: string, limit?: number) => {
+  const textLimit = limit ? limit : CHAR_LIMIT;
+  return text.length > textLimit ? `${text.slice(0, textLimit)}...` : text;
 };

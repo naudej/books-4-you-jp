@@ -3,6 +3,8 @@ export const THUMBNAIL_SIZES = {
   lg: { width: '110px', height: '140px' },
 };
 
+export const CHAR_LIMIT = 40;
+
 export const LARGE_ICON = 60;
 export const MEDIUM_ICON = 30;
 
