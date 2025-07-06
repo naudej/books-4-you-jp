@@ -112,7 +112,7 @@ const Catalogue = () => {
         </Button>
       </Grid>
       {isMobile ? (
-        <BooksCards books={books} />
+        <BooksCards books={books} loading={loading} />
       ) : (
         <BooksTable
           initialSortBy={sortByParam}

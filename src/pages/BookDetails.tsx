@@ -43,52 +43,44 @@ const BookDetails = () => {
   } = book;
   return (
     <Stack spacing={3} direction="column">
-      <Stack
-        direction="row"
-        sx={{
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Stack
-          direction="row"
-          sx={{
-            alignItems: 'center',
-          }}
-          spacing={2}
+      <Grid container={true} spacing={2} alignItems="center">
+        <Grid
+          size={{ xs: 12, md: 2 }}
+          container={true}
+          alignItems="center"
+          justifyContent="center"
+          spacing={1}
         >
-          <BackButton />
-          <BookPreviewImage title={title} src={thumbnail} variant="lg" />
-          <Stack direction="column" spacing={2}>
-            <Typography noWrap={true} aria-label={title} variant="h5">
-              {title}
-            </Typography>
-            {subtitle && (
-              <Typography noWrap={true} aria-label={subtitle} variant="h6" color="textSecondary">
-                {subtitle}
-              </Typography>
-            )}
-            <Stack
-              direction="row"
-              divider={<Divider orientation="vertical" aria-hidden={true} flexItem={true} />}
-              spacing={2}
-            >
-              {authors.map((author) => (
-                <Typography
-                  noWrap={true}
-                  color="textSecondary"
-                  aria-label={author}
-                  variant="subtitle2"
-                  key={author}
-                >
-                  {author}
-                </Typography>
-              ))}
-            </Stack>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={2}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <BackButton />
+            <BookPreviewImage title={title} src={thumbnail} variant="lg" />
           </Stack>
-        </Stack>
-        <Stack>{retailPrice && buyLink && <BuyButton link={buyLink} price={retailPrice} />}</Stack>
-      </Stack>
+        </Grid>
+        <Grid size={{ xs: 12, md: 8 }} spacing={2}>
+          <Typography variant="h5" aria-label={title}>
+            {title}
+          </Typography>
+          {subtitle && (
+            <Typography variant="h6" aria-label={subtitle} color="textSecondary">
+              {subtitle}
+            </Typography>
+          )}
+          {authors.map((author) => (
+            <Typography variant="subtitle2" color="textSecondary" aria-label={author}>
+              {author}
+            </Typography>
+          ))}
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 2 }}>
+          {retailPrice && buyLink && <BuyButton link={buyLink} price={retailPrice} />}
+        </Grid>
+      </Grid>
       <Stack
         direction="row"
         spacing={1}
@@ -123,14 +115,14 @@ const BookDetails = () => {
         Additional Information:
       </Typography>
       <Grid container={true}>
-        <Grid size={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Stack spacing={1}>
             <InfoItem label="ID" value={id} />
             <InfoItem label="ISBN" value={isbn} />
             <InfoItem label="Language" value={language} />
           </Stack>
         </Grid>
-        <Grid size={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Stack spacing={1}>
             <InfoItem
               label="Published Date"
